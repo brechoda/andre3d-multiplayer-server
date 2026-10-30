@@ -6,6 +6,11 @@ const BUILD = process.env.BUILD || "andre3d-mp-v1";
 const MAX_PLAYERS_PER_ROOM = 8;
 const MAX_MESSAGE_BYTES = 4096;
 const TICK_MS = 100;
+const MELEE_COMBAT_RANGE = 2.05;
+const ATTACK_RATE_LIMIT_MS = 180;
+const HIT_RATE_LIMIT_MS = 250;
+const HIT_AFTER_ATTACK_WINDOW_MS = 1400;
+const ATTACK_ANIMATIONS = new Set(["FightA_1", "FightA_2", "FightA_3"]);
 const rooms = new Map();
 let nextId = 1;
 
@@ -72,6 +77,8 @@ websocketServer.on("connection", (socket) => {
     riding: false,
     character: "andre",
     lastStateAt: 0,
+    lastAttackAt: 0,
+    lastHitAt: 0,
   };
 
   socket.on("message", (raw) => {
@@ -114,7 +121,42 @@ websocketServer.on("connection", (socket) => {
       player.ry = clamp(message.ry, -Math.PI * 4, Math.PI * 4);
       player.vehicle = safeText(message.vehicle, "on_foot", 20);
       player.riding = message.riding === true;
-      player.character = message.character === "gorece" ? "gorece" : player.character;
+      if (message.character === "andre" || message.character === "gorece") {
+        player.character = message.character;
+      }
+      return;
+    }
+    if (message.type === "combat") {
+      const now = Date.now();
+      const action = message.action;
+      if (action !== "attack" && action !== "hit") return;
+      if (action === "attack") {
+        if (now - player.lastAttackAt < ATTACK_RATE_LIMIT_MS || !ATTACK_ANIMATIONS.has(message.animation)) return;
+        player.lastAttackAt = now;
+      }
+
+      let targetId = "";
+      if (action === "hit") {
+        if (now - player.lastHitAt < HIT_RATE_LIMIT_MS || now - player.lastAttackAt > HIT_AFTER_ATTACK_WINDOW_MS) return;
+        const target = player.room.players.get(String(message.target_id || ""));
+        if (!target || target === player) return;
+        const dx = target.x - player.x;
+        const dz = target.z - player.z;
+        if (Math.hypot(dx, dz) > MELEE_COMBAT_RANGE) return;
+        targetId = target.id;
+        player.lastHitAt = now;
+      }
+
+      broadcast(player.room, {
+        type: "combat",
+        attacker_id: player.id,
+        action,
+        animation: action === "attack" ? message.animation : "",
+        target_id: targetId,
+        x: player.x,
+        y: player.y,
+        z: player.z,
+      }, player.socket);
       return;
     }
     if (message.type === "leave") socket.close(1000, "leave");
