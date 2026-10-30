@@ -31,6 +31,10 @@ function roomState(room) {
     ry: player.ry,
     vehicle: player.vehicle,
     riding: player.riding,
+    vehicle_x: player.vehicle_x,
+    vehicle_y: player.vehicle_y,
+    vehicle_z: player.vehicle_z,
+    vehicle_ry: player.vehicle_ry,
     character: player.character,
   }));
 }
@@ -75,6 +79,10 @@ websocketServer.on("connection", (socket) => {
     ry: 0,
     vehicle: "on_foot",
     riding: false,
+    vehicle_x: 0,
+    vehicle_y: 0,
+    vehicle_z: 0,
+    vehicle_ry: 0,
     character: "andre",
     lastStateAt: 0,
     lastAttackAt: 0,
@@ -86,6 +94,12 @@ websocketServer.on("connection", (socket) => {
     let message;
     try { message = JSON.parse(raw.toString()); } catch { return; }
     if (!message || typeof message.type !== "string") return;
+
+    if (message.type === "ping") {
+      const sentAt = isFiniteNumber(message.sent_at) ? message.sent_at : 0;
+      if (socket.readyState === 1) socket.send(JSON.stringify({ type: "pong", sent_at: sentAt }));
+      return;
+    }
 
     if (message.type === "join") {
       if (player.room) return;
@@ -104,7 +118,7 @@ websocketServer.on("connection", (socket) => {
       player.room = room;
       room.players.set(player.id, player);
       socket.send(JSON.stringify({ type: "welcome", id: player.id, room: room.code, players: roomState(room), maxPlayers: MAX_PLAYERS_PER_ROOM }));
-      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, vehicle: "on_foot", riding: false, character: player.character } }, socket);
+      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, vehicle: "on_foot", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, character: player.character } }, socket);
       return;
     }
 
@@ -121,6 +135,10 @@ websocketServer.on("connection", (socket) => {
       player.ry = clamp(message.ry, -Math.PI * 4, Math.PI * 4);
       player.vehicle = safeText(message.vehicle, "on_foot", 20);
       player.riding = message.riding === true;
+      player.vehicle_x = clamp(isFiniteNumber(message.vehicle_x) ? message.vehicle_x : player.x, -10000, 10000);
+      player.vehicle_y = clamp(isFiniteNumber(message.vehicle_y) ? message.vehicle_y : player.y, -100, 1000);
+      player.vehicle_z = clamp(isFiniteNumber(message.vehicle_z) ? message.vehicle_z : player.z, -10000, 10000);
+      player.vehicle_ry = clamp(isFiniteNumber(message.vehicle_ry) ? message.vehicle_ry : player.ry, -Math.PI * 4, Math.PI * 4);
       if (message.character === "andre" || message.character === "gorece") {
         player.character = message.character;
       }
@@ -156,7 +174,7 @@ websocketServer.on("connection", (socket) => {
         x: player.x,
         y: player.y,
         z: player.z,
-      }, player.socket);
+      });
       return;
     }
     if (message.type === "leave") socket.close(1000, "leave");
