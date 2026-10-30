@@ -26,6 +26,7 @@ function roomState(room) {
     ry: player.ry,
     vehicle: player.vehicle,
     riding: player.riding,
+    character: player.character,
   }));
 }
 
@@ -69,6 +70,7 @@ websocketServer.on("connection", (socket) => {
     ry: 0,
     vehicle: "on_foot",
     riding: false,
+    character: "andre",
     lastStateAt: 0,
   };
 
@@ -91,10 +93,11 @@ websocketServer.on("connection", (socket) => {
         return socket.send(JSON.stringify({ type: "error", code: "ROOM_FULL" }));
       }
       player.name = safeText(message.name, player.id);
+      player.character = message.character === "gorece" ? "gorece" : "andre";
       player.room = room;
       room.players.set(player.id, player);
       socket.send(JSON.stringify({ type: "welcome", id: player.id, room: room.code, players: roomState(room), maxPlayers: MAX_PLAYERS_PER_ROOM }));
-      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, vehicle: "on_foot", riding: false } }, socket);
+      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, vehicle: "on_foot", riding: false, character: player.character } }, socket);
       return;
     }
 
@@ -111,6 +114,7 @@ websocketServer.on("connection", (socket) => {
       player.ry = clamp(message.ry, -Math.PI * 4, Math.PI * 4);
       player.vehicle = safeText(message.vehicle, "on_foot", 20);
       player.riding = message.riding === true;
+      player.character = message.character === "gorece" ? "gorece" : player.character;
       return;
     }
     if (message.type === "leave") socket.close(1000, "leave");
