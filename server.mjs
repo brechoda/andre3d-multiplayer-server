@@ -2,7 +2,7 @@ import http from "node:http";
 import { WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT || 8080);
-const BUILD = process.env.BUILD || "andre3d-mp-v1";
+const BUILD = process.env.BUILD || "andre3d-mp-v2";
 const MAX_PLAYERS_PER_ROOM = 8;
 const MAX_MESSAGE_BYTES = 4096;
 const TICK_MS = 50;
@@ -10,6 +10,11 @@ const MELEE_COMBAT_RANGE = 2.05;
 const ATTACK_RATE_LIMIT_MS = 180;
 const HIT_RATE_LIMIT_MS = 250;
 const HIT_AFTER_ATTACK_WINDOW_MS = 1400;
+const VEHICLE_TYPES = new Map([
+  ["pop100_01", "pop100"],
+  ["wayfarer_01", "wayfarer"],
+  ["hilux_01", "hilux"],
+]);
 const ATTACK_ANIMATIONS = new Set(["FightA_1", "FightA_2", "FightA_3"]);
 const rooms = new Map();
 let nextId = 1;
@@ -30,6 +35,7 @@ function roomState(room) {
     z: player.z,
     ry: player.ry,
     vehicle: player.vehicle,
+    vehicle_id: player.vehicle_id,
     riding: player.riding,
     vehicle_x: player.vehicle_x,
     vehicle_y: player.vehicle_y,
@@ -49,6 +55,9 @@ function broadcast(room, payload, except = null) {
 function leave(player) {
   if (!player.room) return;
   const room = player.room;
+  if (player.claimedVehicleId && room.vehicleOwners.get(player.claimedVehicleId) === player.id) {
+    room.vehicleOwners.delete(player.claimedVehicleId);
+  }
   room.players.delete(player.id);
   player.room = null;
   broadcast(room, { type: "player_left", id: player.id });
@@ -78,6 +87,8 @@ websocketServer.on("connection", (socket) => {
     z: 0,
     ry: 0,
     vehicle: "on_foot",
+    vehicle_id: "",
+    claimedVehicleId: "",
     riding: false,
     vehicle_x: 0,
     vehicle_y: 0,
@@ -85,6 +96,7 @@ websocketServer.on("connection", (socket) => {
     vehicle_ry: 0,
     character: "andre",
     lastStateAt: 0,
+    lastVehicleClaimAt: 0,
     lastAttackAt: 0,
     lastHitAt: 0,
   };
@@ -107,7 +119,7 @@ websocketServer.on("connection", (socket) => {
       const code = safeText(message.room, "PUBLIC").toUpperCase();
       let room = rooms.get(code);
       if (!room) {
-        room = { code, players: new Map() };
+        room = { code, players: new Map(), vehicleOwners: new Map() };
         rooms.set(code, room);
       }
       if (room.players.size >= MAX_PLAYERS_PER_ROOM) {
@@ -118,11 +130,50 @@ websocketServer.on("connection", (socket) => {
       player.room = room;
       room.players.set(player.id, player);
       socket.send(JSON.stringify({ type: "welcome", id: player.id, room: room.code, players: roomState(room), maxPlayers: MAX_PLAYERS_PER_ROOM }));
-      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, vehicle: "on_foot", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, character: player.character } }, socket);
+      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, vehicle: "on_foot", vehicle_id: "", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, character: player.character } }, socket);
       return;
     }
 
     if (!player.room) return;
+    if (message.type === "vehicle_claim") {
+      const now = Date.now();
+      const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
+      const ownerId = player.room.vehicleOwners.get(vehicleId);
+      const vehicleType = VEHICLE_TYPES.get(vehicleId);
+      let granted = true;
+      let reason = "";
+      if (now - player.lastVehicleClaimAt < 100) {
+        granted = false;
+        reason = "RATE_LIMITED";
+      } else if (!vehicleType) {
+        granted = false;
+        reason = "UNKNOWN_VEHICLE";
+      } else if (player.claimedVehicleId && player.claimedVehicleId !== vehicleId) {
+        granted = false;
+        reason = "ALREADY_CLAIMED";
+      } else if (ownerId && ownerId !== player.id) {
+        granted = false;
+        reason = "OCCUPIED";
+      }
+      player.lastVehicleClaimAt = now;
+      if (granted) {
+        player.room.vehicleOwners.set(vehicleId, player.id);
+        player.claimedVehicleId = vehicleId;
+      }
+      if (socket.readyState === 1) socket.send(JSON.stringify({ type: "vehicle_claim_result", vehicle_id: vehicleId, granted, reason }));
+      return;
+    }
+    if (message.type === "vehicle_release") {
+      const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
+      if (player.claimedVehicleId === vehicleId && player.room.vehicleOwners.get(vehicleId) === player.id) {
+        player.room.vehicleOwners.delete(vehicleId);
+        player.claimedVehicleId = "";
+        player.vehicle_id = "";
+        player.vehicle = "on_foot";
+        player.riding = false;
+      }
+      return;
+    }
     if (message.type === "state") {
       const now = Date.now();
       if (now - player.lastStateAt < 25) return;
@@ -133,8 +184,22 @@ websocketServer.on("connection", (socket) => {
       player.y = clamp(message.y, -100, 1000);
       player.z = clamp(message.z, -10000, 10000);
       player.ry = clamp(message.ry, -Math.PI * 4, Math.PI * 4);
-      player.vehicle = safeText(message.vehicle, "on_foot", 20);
-      player.riding = message.riding === true;
+      const wantsToRide = message.riding === true;
+      if (wantsToRide) {
+        const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
+        const vehicleType = VEHICLE_TYPES.get(vehicleId);
+        if (!vehicleType || player.claimedVehicleId !== vehicleId || player.room.vehicleOwners.get(vehicleId) !== player.id) {
+          if (socket.readyState === 1) socket.send(JSON.stringify({ type: "vehicle_claim_result", vehicle_id: vehicleId, granted: false, reason: "CLAIM_REQUIRED" }));
+          return;
+        }
+        player.vehicle = vehicleType;
+        player.vehicle_id = vehicleId;
+        player.riding = true;
+      } else {
+        player.vehicle = "on_foot";
+        player.vehicle_id = "";
+        player.riding = false;
+      }
       player.vehicle_x = clamp(isFiniteNumber(message.vehicle_x) ? message.vehicle_x : player.x, -10000, 10000);
       player.vehicle_y = clamp(isFiniteNumber(message.vehicle_y) ? message.vehicle_y : player.y, -100, 1000);
       player.vehicle_z = clamp(isFiniteNumber(message.vehicle_z) ? message.vehicle_z : player.z, -10000, 10000);
