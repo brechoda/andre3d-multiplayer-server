@@ -2,14 +2,15 @@ import http from "node:http";
 import { WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT || 8080);
-const BUILD = process.env.BUILD || "andre3d-mp-v2";
+const BUILD = process.env.BUILD || "andre3d-mp-v3";
 const MAX_PLAYERS_PER_ROOM = 8;
 const MAX_MESSAGE_BYTES = 4096;
-const TICK_MS = 50;
+const MAX_BUFFERED_STATE_BYTES = 64 * 1024;
 const MELEE_COMBAT_RANGE = 2.05;
 const ATTACK_RATE_LIMIT_MS = 180;
 const HIT_RATE_LIMIT_MS = 250;
 const HIT_AFTER_ATTACK_WINDOW_MS = 1400;
+const JUMP_RATE_LIMIT_MS = 250;
 const VEHICLE_TYPES = new Map([
   ["pop100_01", "pop100"],
   ["wayfarer_01", "wayfarer"],
@@ -26,14 +27,19 @@ const safeText = (value, fallback, max = 24) => {
   return value.trim().slice(0, max) || fallback;
 };
 
-function roomState(room) {
-  return [...room.players.values()].map((player) => ({
+function playerState(player) {
+  return {
     id: player.id,
     name: player.name,
     x: player.x,
     y: player.y,
     z: player.z,
     ry: player.ry,
+    seq: player.stateSequence,
+    vx: player.vx,
+    vy: player.vy,
+    vz: player.vz,
+    latency_ms: player.latencyMs,
     vehicle: player.vehicle,
     vehicle_id: player.vehicle_id,
     riding: player.riding,
@@ -41,14 +47,30 @@ function roomState(room) {
     vehicle_y: player.vehicle_y,
     vehicle_z: player.vehicle_z,
     vehicle_ry: player.vehicle_ry,
+    vehicle_vx: player.vehicle_vx,
+    vehicle_vy: player.vehicle_vy,
+    vehicle_vz: player.vehicle_vz,
     character: player.character,
-  }));
+  };
+}
+
+function roomState(room) {
+  return [...room.players.values()].map(playerState);
 }
 
 function broadcast(room, payload, except = null) {
   const data = JSON.stringify(payload);
   for (const player of room.players.values()) {
     if (player.socket !== except && player.socket.readyState === 1) player.socket.send(data);
+  }
+}
+
+function broadcastState(room, player, except = null) {
+  const data = JSON.stringify({ type: "snapshot", players: [playerState(player)] });
+  for (const recipient of room.players.values()) {
+    if (recipient.socket === except || recipient.socket.readyState !== 1) continue;
+    // A slow client should receive a fresh pose, not a growing queue of obsolete poses.
+    if (recipient.socket.bufferedAmount <= MAX_BUFFERED_STATE_BYTES) recipient.socket.send(data);
   }
 }
 
@@ -86,6 +108,11 @@ websocketServer.on("connection", (socket) => {
     y: 0,
     z: 0,
     ry: 0,
+    stateSequence: 0,
+    vx: 0,
+    vy: 0,
+    vz: 0,
+    latencyMs: 0,
     vehicle: "on_foot",
     vehicle_id: "",
     claimedVehicleId: "",
@@ -94,8 +121,13 @@ websocketServer.on("connection", (socket) => {
     vehicle_y: 0,
     vehicle_z: 0,
     vehicle_ry: 0,
+    vehicle_vx: 0,
+    vehicle_vy: 0,
+    vehicle_vz: 0,
     character: "andre",
     lastStateAt: 0,
+    lastJumpAt: 0,
+    jumpSequence: 0,
     lastVehicleClaimAt: 0,
     lastAttackAt: 0,
     lastHitAt: 0,
@@ -130,7 +162,7 @@ websocketServer.on("connection", (socket) => {
       player.room = room;
       room.players.set(player.id, player);
       socket.send(JSON.stringify({ type: "welcome", id: player.id, room: room.code, players: roomState(room), maxPlayers: MAX_PLAYERS_PER_ROOM }));
-      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, vehicle: "on_foot", vehicle_id: "", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, character: player.character } }, socket);
+      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, seq: 0, vx: 0, vy: 0, vz: 0, latency_ms: 0, vehicle: "on_foot", vehicle_id: "", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, vehicle_vx: 0, vehicle_vy: 0, vehicle_vz: 0, character: player.character } }, socket);
       return;
     }
 
@@ -174,16 +206,33 @@ websocketServer.on("connection", (socket) => {
       }
       return;
     }
+    if (message.type === "jump") {
+      const now = Date.now();
+      const sequence = message.seq;
+      if (!Number.isSafeInteger(sequence) || sequence <= player.jumpSequence || player.riding) return;
+      if (now - player.lastJumpAt < JUMP_RATE_LIMIT_MS) return;
+      player.jumpSequence = sequence;
+      player.lastJumpAt = now;
+      broadcast(player.room, { type: "jump", id: player.id, seq: sequence }, socket);
+      return;
+    }
     if (message.type === "state") {
       const now = Date.now();
-      if (now - player.lastStateAt < 25) return;
-      player.lastStateAt = now;
-      const values = [message.x, message.y, message.z, message.ry];
+      const sequence = message.seq;
+      if (!Number.isSafeInteger(sequence) || sequence <= player.stateSequence) return;
+      if (now - player.lastStateAt < 20) return;
+      const values = [message.x, message.y, message.z, message.ry, message.vx, message.vy, message.vz];
       if (!values.every(isFiniteNumber)) return;
+      const vehicleValues = [message.vehicle_x, message.vehicle_y, message.vehicle_z, message.vehicle_ry, message.vehicle_vx, message.vehicle_vy, message.vehicle_vz];
+      if (!vehicleValues.every(isFiniteNumber) || !isFiniteNumber(message.latency_ms)) return;
       player.x = clamp(message.x, -10000, 10000);
       player.y = clamp(message.y, -100, 1000);
       player.z = clamp(message.z, -10000, 10000);
       player.ry = clamp(message.ry, -Math.PI * 4, Math.PI * 4);
+      player.vx = clamp(message.vx, -60, 60);
+      player.vy = clamp(message.vy, -60, 60);
+      player.vz = clamp(message.vz, -60, 60);
+      player.latencyMs = clamp(message.latency_ms, 0, 250);
       const wantsToRide = message.riding === true;
       if (wantsToRide) {
         const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
@@ -204,9 +253,15 @@ websocketServer.on("connection", (socket) => {
       player.vehicle_y = clamp(isFiniteNumber(message.vehicle_y) ? message.vehicle_y : player.y, -100, 1000);
       player.vehicle_z = clamp(isFiniteNumber(message.vehicle_z) ? message.vehicle_z : player.z, -10000, 10000);
       player.vehicle_ry = clamp(isFiniteNumber(message.vehicle_ry) ? message.vehicle_ry : player.ry, -Math.PI * 4, Math.PI * 4);
+      player.vehicle_vx = clamp(message.vehicle_vx, -60, 60);
+      player.vehicle_vy = clamp(message.vehicle_vy, -60, 60);
+      player.vehicle_vz = clamp(message.vehicle_vz, -60, 60);
+      player.stateSequence = sequence;
+      player.lastStateAt = now;
       if (message.character === "andre" || message.character === "gorece") {
         player.character = message.character;
       }
+      broadcastState(player.room, player, socket);
       return;
     }
     if (message.type === "combat") {
@@ -247,10 +302,6 @@ websocketServer.on("connection", (socket) => {
   socket.on("close", () => leave(player));
   socket.on("error", () => leave(player));
 });
-
-setInterval(() => {
-  for (const room of rooms.values()) broadcast(room, { type: "snapshot", players: roomState(room) });
-}, TICK_MS);
 
 httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`[andre3d-server] listening on 0.0.0.0:${PORT} build=${BUILD}`);

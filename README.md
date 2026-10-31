@@ -1,6 +1,10 @@
 # Servidor multiplayer Andre 3D
 
-Servidor WebSocket Node.js para o jogo Andre 3D. Execute `npm ci` e `npm start`; a aplicação escuta em `PORT` (padrão 8080), expõe `/health` e aceita conexões em `/ws`. O cliente e o servidor precisam usar o mesmo build (`andre3d-mp-v2`).
+Servidor WebSocket Node.js para o jogo Andre 3D. Execute `npm ci` e `npm start`; a aplicação escuta em `PORT` (padrão 8080), expõe `/health` e aceita conexões em `/ws`. O cliente e o servidor precisam usar o mesmo build (`andre3d-mp-v3`).
+
+## Movimento e pulo
+
+O cliente publica o estado numerado a 30 Hz, com posição, velocidade e latência estimada. O servidor valida sequências e retransmite cada pose imediatamente, em vez de aguardar um tick de 50 ms; se um cliente acumular mais de 64 KiB de poses pendentes, poses antigas são descartadas para ele receber a próxima atualização recente. O cliente remoto prevê no máximo 200 ms à frente e suaviza pequenos erros, aplicando snap apenas no primeiro estado ou quando a correção passa de 1,6 m (3 m para veículos). O pulo é um evento único no takeoff, retransmitido uma vez por sala e limitado a uma ocorrência a cada 250 ms.
 
 ## Veículos compartilhados
 
@@ -14,4 +18,4 @@ Esses eventos sincronizam **animações visuais**; não implementam pontos de vi
 
 ## Testes
 
-Execute `npm test` para iniciar clientes WebSocket concorrentes e verificar reserva exclusiva, veículo desconhecido, liberação e nova reserva. No projeto Godot, `tests/multiplayer_two_clients.gd` abre duas cenas completas contra um servidor local e verifica moto, Hilux, piloto remoto e identidade compartilhada do veículo.
+Execute `npm test` para iniciar clientes WebSocket concorrentes e verificar reserva exclusiva, liberação, relay imediato, rejeição de sequência antiga e retransmissão única do pulo. No projeto Godot, `tests/multiplayer_two_clients.gd` abre duas cenas completas contra um servidor local e verifica moto, Hilux, pulo remoto e identidade compartilhada do veículo.
