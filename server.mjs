@@ -1,4 +1,6 @@
 import http from "node:http";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT || 8080);
@@ -11,6 +13,7 @@ const ATTACK_RATE_LIMIT_MS = 180;
 const HIT_RATE_LIMIT_MS = 250;
 const HIT_AFTER_ATTACK_WINDOW_MS = 1400;
 const JUMP_RATE_LIMIT_MS = 250;
+const UPDATES_ROOT = path.resolve(process.cwd(), "updates");
 const VEHICLE_TYPES = new Map([
   ["pop100_01", "pop100"],
   ["wayfarer_01", "wayfarer"],
@@ -89,8 +92,50 @@ function leave(player) {
   if (room.players.size === 0) rooms.delete(room.code);
 }
 
-const httpServer = http.createServer((request, response) => {
-  if (request.url === "/health") {
+const contentTypes = new Map([
+  [".json", "application/json; charset=utf-8"],
+  [".pck", "application/octet-stream"],
+  [".zip", "application/zip"],
+]);
+
+const serveUpdateFile = async (request, response, pathname) => {
+  const relativePath = pathname.slice("/updates/".length);
+  if (!relativePath || relativePath.includes("..") || relativePath.includes("\\")) {
+    response.writeHead(400);
+    response.end("invalid update path");
+    return;
+  }
+  const filePath = path.resolve(UPDATES_ROOT, relativePath);
+  if (filePath !== UPDATES_ROOT && !filePath.startsWith(`${UPDATES_ROOT}${path.sep}`)) {
+    response.writeHead(400);
+    response.end("invalid update path");
+    return;
+  }
+  try {
+    const data = await fs.readFile(filePath);
+    const type = contentTypes.get(path.extname(filePath).toLowerCase()) || "application/octet-stream";
+    response.writeHead(200, {
+      "content-type": type,
+      "cache-control": relativePath === "manifest.json" ? "no-cache" : "public, max-age=31536000, immutable",
+      "content-length": data.byteLength,
+    });
+    if (request.method !== "HEAD") response.end(data);
+    else response.end();
+  } catch {
+    response.writeHead(404);
+    response.end("update file not found");
+  }
+};
+
+const httpServer = http.createServer(async (request, response) => {
+  const pathname = new URL(request.url || "/", "http://localhost").pathname;
+  if (request.method === "GET" || request.method === "HEAD") {
+    if (pathname.startsWith("/updates/")) {
+      await serveUpdateFile(request, response, pathname);
+      return;
+    }
+  }
+  if (pathname === "/health") {
     response.writeHead(200, { "content-type": "application/json" });
     response.end(JSON.stringify({ ok: true, build: BUILD, rooms: rooms.size }));
     return;
