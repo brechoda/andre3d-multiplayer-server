@@ -119,7 +119,7 @@ try {
   const stateSentAt = performance.now();
   first.send({
     type: "state", seq: 1, x: 2, y: 0.1, z: 3, ry: 1.2,
-    vx: 1.5, vy: 0, vz: -2, latency_ms: 30,
+    vx: 1.5, vy: 0, vz: -2, running: true, latency_ms: 30,
     vehicle: "hilux", vehicle_id: "hilux_01", riding: true,
     vehicle_x: 10, vehicle_y: 0.7, vehicle_z: 12, vehicle_ry: 1.2,
     vehicle_vx: 3, vehicle_vy: 0, vehicle_vz: -4,
@@ -135,6 +135,7 @@ try {
   assert.equal(sharedVehicleState.vehicle_z, 12);
   assert.equal(sharedVehicleState.vx, 1.5);
   assert.equal(sharedVehicleState.vehicle_vz, -4);
+  assert.equal(sharedVehicleState.running, true);
 
   const staleSnapshot = second.next((message) => message.type === "snapshot"
     && message.players.some((player) => player.id === firstWelcome.id && player.x === 999), 120);

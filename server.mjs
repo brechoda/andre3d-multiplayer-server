@@ -40,6 +40,7 @@ function playerState(player) {
     vx: player.vx,
     vy: player.vy,
     vz: player.vz,
+    running: player.running,
     latency_ms: player.latencyMs,
     vehicle: player.vehicle,
     vehicle_id: player.vehicle_id,
@@ -114,6 +115,7 @@ websocketServer.on("connection", (socket) => {
     vx: 0,
     vy: 0,
     vz: 0,
+    running: false,
     latencyMs: 0,
     vehicle: "on_foot",
     vehicle_id: "",
@@ -165,7 +167,7 @@ websocketServer.on("connection", (socket) => {
       player.room = room;
       room.players.set(player.id, player);
       socket.send(JSON.stringify({ type: "welcome", id: player.id, room: room.code, players: roomState(room), maxPlayers: MAX_PLAYERS_PER_ROOM }));
-      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, seq: 0, vx: 0, vy: 0, vz: 0, latency_ms: 0, vehicle: "on_foot", vehicle_id: "", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, vehicle_vx: 0, vehicle_vy: 0, vehicle_vz: 0, vehicle_audio: "off", character: player.character } }, socket);
+      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, seq: 0, vx: 0, vy: 0, vz: 0, running: false, latency_ms: 0, vehicle: "on_foot", vehicle_id: "", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, vehicle_vx: 0, vehicle_vy: 0, vehicle_vz: 0, vehicle_audio: "off", character: player.character } }, socket);
       return;
     }
 
@@ -229,6 +231,7 @@ websocketServer.on("connection", (socket) => {
       if (now - player.lastStateAt < 20) return;
       const values = [message.x, message.y, message.z, message.ry, message.vx, message.vy, message.vz];
       if (!values.every(isFiniteNumber)) return;
+      if (message.running !== undefined && typeof message.running !== "boolean") return;
       const vehicleValues = [message.vehicle_x, message.vehicle_y, message.vehicle_z, message.vehicle_ry, message.vehicle_vx, message.vehicle_vy, message.vehicle_vz];
       if (!vehicleValues.every(isFiniteNumber) || !isFiniteNumber(message.latency_ms)) return;
       const allowedAudio = new Set(["off", "idle", "accel", "decel"]);
@@ -241,6 +244,7 @@ websocketServer.on("connection", (socket) => {
       player.vx = clamp(message.vx, -60, 60);
       player.vy = clamp(message.vy, -60, 60);
       player.vz = clamp(message.vz, -60, 60);
+      player.running = message.running === true;
       player.latencyMs = clamp(message.latency_ms, 0, 250);
       const wantsToRide = message.riding === true;
       const requestedCharacter = CHARACTERS.has(message.character) ? message.character : player.character;
