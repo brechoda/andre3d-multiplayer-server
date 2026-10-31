@@ -1,5 +1,5 @@
 {
-  "version": "2026.10.31.2",
+  "version": "2026.10.31.3",
   "min_app_version": "2.0.5",
   "files": [
     {
@@ -10,13 +10,13 @@
       "sha256": "cd48f3f49c4c7fbf39709daaef5c94e9aa5aa823eaf558737d7c9cfdcd5869e8"
     }
   ],
-  "min_online_version": "2.0.5",
+  "min_online_version": "2.0.6",
   "client": {
-    "version": "2.0.5",
-    "code": 7,
-    "url": "https://github.com/brechoda/Andre3D-GTA3/releases/download/v2.0.5/Andre3D-2.0.5.apk",
-    "size": 175577637,
-    "sha256": "09d06624adcc6c55234071757757d065b3da8b52bfa704ef04c21c9787f829e3",
+    "version": "2.0.6",
+    "code": 8,
+    "url": "https://github.com/brechoda/Andre3D-GTA3/releases/download/v2.0.6/Andre3D-2.0.6.apk",
+    "size": 175581725,
+    "sha256": "b72785c366f9dded5bfd952677e52cf34551b2cdeaa1e3c0bf47b1ecb4103efe",
     "mandatory_online": true
   }
 }
