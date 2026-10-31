@@ -5,6 +5,7 @@ import { WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT || 8080);
 const BUILD = process.env.BUILD || "andre3d-mp-v4";
+const MIN_CLIENT_VERSION = process.env.MIN_CLIENT_VERSION || "2.0.5";
 const MAX_PLAYERS_PER_ROOM = 8;
 const MAX_MESSAGE_BYTES = 4096;
 const MAX_BUFFERED_STATE_BYTES = 64 * 1024;
@@ -29,6 +30,15 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const safeText = (value, fallback, max = 24) => {
   if (typeof value !== "string") return fallback;
   return value.trim().slice(0, max) || fallback;
+};
+
+const compareVersions = (left, right) => {
+  const a = String(left || "0.0.0").split(".").map((value) => Number.parseInt(value, 10) || 0);
+  const b = String(right || "0.0.0").split(".").map((value) => Number.parseInt(value, 10) || 0);
+  for (let index = 0; index < 3; index += 1) {
+    if ((a[index] || 0) !== (b[index] || 0)) return (a[index] || 0) > (b[index] || 0) ? 1 : -1;
+  }
+  return 0;
 };
 
 function playerState(player) {
@@ -198,6 +208,9 @@ websocketServer.on("connection", (socket) => {
     if (message.type === "join") {
       if (player.room) return;
       if (message.build !== BUILD) return socket.send(JSON.stringify({ type: "error", code: "BUILD_MISMATCH", build: BUILD }));
+      if (compareVersions(message.app_version, MIN_CLIENT_VERSION) < 0) {
+        return socket.send(JSON.stringify({ type: "error", code: "CLIENT_UPDATE_REQUIRED", min_version: MIN_CLIENT_VERSION }));
+      }
       const code = safeText(message.room, "PUBLIC").toUpperCase();
       let room = rooms.get(code);
       if (!room) {

@@ -66,11 +66,11 @@ async function waitForServer() {
 try {
   await waitForServer();
   const [first, second, dg] = await Promise.all([openClient(), openClient(), openClient()]);
-  first.send({ type: "join", build: "andre3d-mp-v4", room, name: "Tester1", character: "gorece" });
+  first.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.5", room, name: "Tester1", character: "gorece" });
   const firstWelcome = await first.next((message) => message.type === "welcome");
-  second.send({ type: "join", build: "andre3d-mp-v4", room, name: "Tester2", character: "gorece" });
+  second.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.5", room, name: "Tester2", character: "gorece" });
   await second.next((message) => message.type === "welcome");
-  dg.send({ type: "join", build: "andre3d-mp-v4", room, name: "DG Tester", character: "dg" });
+  dg.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.5", room, name: "DG Tester", character: "dg" });
   const dgWelcome = await dg.next((message) => message.type === "welcome");
   assert.equal(dgWelcome.players.find((player) => player.id === dgWelcome.id)?.character, "dg");
 
