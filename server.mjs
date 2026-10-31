@@ -2,7 +2,7 @@ import http from "node:http";
 import { WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT || 8080);
-const BUILD = process.env.BUILD || "andre3d-mp-v3";
+const BUILD = process.env.BUILD || "andre3d-mp-v4";
 const MAX_PLAYERS_PER_ROOM = 8;
 const MAX_MESSAGE_BYTES = 4096;
 const MAX_BUFFERED_STATE_BYTES = 64 * 1024;
@@ -16,6 +16,7 @@ const VEHICLE_TYPES = new Map([
   ["wayfarer_01", "wayfarer"],
   ["hilux_01", "hilux"],
 ]);
+const CHARACTERS = new Set(["andre", "gorece", "dg"]);
 const ATTACK_ANIMATIONS = new Set(["FightA_1", "FightA_2", "FightA_3"]);
 const rooms = new Map();
 let nextId = 1;
@@ -160,7 +161,7 @@ websocketServer.on("connection", (socket) => {
         return socket.send(JSON.stringify({ type: "error", code: "ROOM_FULL" }));
       }
       player.name = safeText(message.name, player.id);
-      player.character = message.character === "gorece" ? "gorece" : "andre";
+      player.character = CHARACTERS.has(message.character) ? message.character : "andre";
       player.room = room;
       room.players.set(player.id, player);
       socket.send(JSON.stringify({ type: "welcome", id: player.id, room: room.code, players: roomState(room), maxPlayers: MAX_PLAYERS_PER_ROOM }));
@@ -182,6 +183,9 @@ websocketServer.on("connection", (socket) => {
       } else if (!vehicleType) {
         granted = false;
         reason = "UNKNOWN_VEHICLE";
+      } else if (player.character === "dg" && vehicleId === "hilux_01") {
+        granted = false;
+        reason = "CHARACTER_CANNOT_USE_VEHICLE";
       } else if (player.claimedVehicleId && player.claimedVehicleId !== vehicleId) {
         granted = false;
         reason = "ALREADY_CLAIMED";
@@ -239,9 +243,26 @@ websocketServer.on("connection", (socket) => {
       player.vz = clamp(message.vz, -60, 60);
       player.latencyMs = clamp(message.latency_ms, 0, 250);
       const wantsToRide = message.riding === true;
+      const requestedCharacter = CHARACTERS.has(message.character) ? message.character : player.character;
       if (wantsToRide) {
         const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
         const vehicleType = VEHICLE_TYPES.get(vehicleId);
+        if (requestedCharacter === "dg" && vehicleId === "hilux_01") {
+          if (player.claimedVehicleId === vehicleId && player.room.vehicleOwners.get(vehicleId) === player.id) {
+            player.room.vehicleOwners.delete(vehicleId);
+            player.claimedVehicleId = "";
+          }
+          player.character = requestedCharacter;
+          player.vehicle = "on_foot";
+          player.vehicle_id = "";
+          player.riding = false;
+          player.vehicle_audio = "off";
+          player.stateSequence = sequence;
+          player.lastStateAt = now;
+          broadcastState(player.room, player, socket);
+          if (socket.readyState === 1) socket.send(JSON.stringify({ type: "vehicle_claim_result", vehicle_id: vehicleId, granted: false, reason: "CHARACTER_CANNOT_USE_VEHICLE" }));
+          return;
+        }
         if (!vehicleType || player.claimedVehicleId !== vehicleId || player.room.vehicleOwners.get(vehicleId) !== player.id) {
           if (socket.readyState === 1) socket.send(JSON.stringify({ type: "vehicle_claim_result", vehicle_id: vehicleId, granted: false, reason: "CLAIM_REQUIRED" }));
           return;
@@ -264,9 +285,7 @@ websocketServer.on("connection", (socket) => {
       player.vehicle_audio = player.riding ? requestedAudio : "off";
       player.stateSequence = sequence;
       player.lastStateAt = now;
-      if (message.character === "andre" || message.character === "gorece") {
-        player.character = message.character;
-      }
+      player.character = requestedCharacter;
       broadcastState(player.room, player, socket);
       return;
     }
