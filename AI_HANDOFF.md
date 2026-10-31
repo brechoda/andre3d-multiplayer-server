@@ -25,12 +25,12 @@ O build multiplayer atual é `andre3d-mp-v4`. O cliente deve enviar no primeiro 
 
 - `type: "join"`
 - `build: "andre3d-mp-v4"`
-- `app_version`, por exemplo `"2.0.9"`
+- `app_version`, por exemplo `"2.1.0"`
 - `room`
 - `name`
 - `character`: `andre`, `gorece` ou `dg`
 
-O servidor rejeita build diferente com `BUILD_MISMATCH` e rejeita APK abaixo de `MIN_CLIENT_VERSION` com `CLIENT_UPDATE_REQUIRED`. A versão mínima padrão atual é `2.0.9`; ela pode ser sobrescrita pela variável de ambiente `MIN_CLIENT_VERSION` no Render quando necessário. O pacote `com.manus.andre3d.next` é a instalação principal a partir da 2.0.6; a 2.0.5 usa outro pacote e não pode ser atualizada no mesmo identificador por causa da troca de chave.
+O servidor rejeita build diferente com `BUILD_MISMATCH` e rejeita APK abaixo de `MIN_CLIENT_VERSION` com `CLIENT_UPDATE_REQUIRED`. A versão mínima padrão atual é `2.1.0`; ela pode ser sobrescrita pela variável de ambiente `MIN_CLIENT_VERSION` no Render quando necessário. O pacote `com.manus.andre3d.next` é a instalação principal a partir da 2.0.6; a 2.0.5 usa outro pacote e não pode ser atualizada no mesmo identificador por causa da troca de chave.
 
 Não remover a validação de versão para “fazer funcionar” com APK antigo. Se o protocolo realmente precisar suportar uma versão anterior, planeje compatibilidade explícita e atualize os testes.
 
@@ -94,7 +94,7 @@ O bloco `client` do manifesto informa o APK mais novo:
 - `sha256`: hash do mesmo APK;
 - `mandatory_online`: indica que a versão é necessária para multiplayer.
 
-O campo `min_online_version` deve ser igual à menor versão que o servidor aceita. O APK atual está em GitHub Release `v2.0.9` e o asset é `Andre3D-2.0.9.apk`.
+O campo `min_online_version` deve ser igual à menor versão que o servidor aceita. O APK atual está em GitHub Release `v2.1.0` e o asset é `Andre3D-2.1.0.apk`.
 
 Quando um novo APK for criado, primeiro publique o asset no GitHub Release e só depois atualize o manifesto. O hash deve ser calculado no arquivo final publicado:
 
@@ -114,7 +114,7 @@ npm test
 node --check server.mjs
 ```
 
-O teste `test_vehicle_claims.mjs` inicia um servidor local, verifica que 2.0.5 é recusado e conecta clientes concorrentes com `app_version: "2.0.9"` para validar relay imediato, identidade DG, acesso às motos, bloqueio da Hilux, estado stale, pulo e posse exclusiva.
+O teste `test_vehicle_claims.mjs` inicia um servidor local, verifica que 2.0.5 é recusado e conecta clientes concorrentes com `app_version: "2.1.0"` para validar relay imediato, identidade DG, acesso às motos, bloqueio da Hilux, estado stale, pulo e posse exclusiva.
 
 Ao alterar a validação de versão, inclua casos para:
 
@@ -142,9 +142,9 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 ## Estado atual entregue
 
 - Build: `andre3d-mp-v4`.
-- Versão mínima online: `2.0.9`.
-- Manifesto atual: `2026.10.31.6`.
-- APK atual: `2.0.9`, código Android `11`, package id `com.manus.andre3d.next`.
+- Versão mínima online: `2.1.0`.
+- Manifesto atual: `2026.10.31.8`.
+- APK atual: `2.1.0`, código Android `12`, package id `com.manus.andre3d.next`.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
 - Commit do gate/manifesto: `64f9239`.
 
