@@ -2,6 +2,8 @@
 
 Servidor WebSocket Node.js para o jogo Andre 3D. Execute `npm ci` e `npm start`; a aplicação escuta em `PORT` (padrão 8080), expõe `/health`, serve atualizações em `/updates/manifest.json` e aceita conexões em `/ws`. O cliente e o servidor precisam usar o mesmo build (`andre3d-mp-v4`), que reconhece André, Gorece e DG e bloqueia a Hilux para DG.
 
+Para outra IA continuar o deploy, o protocolo, o gate de versão, o manifesto e o fluxo de releases, leia o [Manual de continuidade para IA](AI_HANDOFF.md) antes de alterar o servidor.
+
 ## Atualizações remotas do APK
 
 O APK preparado para atualizações consulta `https://andre3d-multiplayer-server.onrender.com/updates/manifest.json` ao abrir. O manifesto valida cada arquivo por tamanho e SHA-256; arquivos `kind: "file"` ficam no cache `user://updates/files` e pacotes `kind: "pck"` são carregados pelo Godot como resource packs. Para publicar conteúdo, altere `updates/files/`, regenere os campos `size` e `sha256` no manifesto, faça commit/push e aguarde o deploy do Render. Se o servidor ou o download falhar, o jogo usa o conteúdo instalado anteriormente e continua abrindo.
