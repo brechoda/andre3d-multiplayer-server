@@ -5,7 +5,7 @@ import { WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT || 8080);
 const BUILD = process.env.BUILD || "andre3d-mp-v4";
-const MIN_CLIENT_VERSION = process.env.MIN_CLIENT_VERSION || "2.0.7";
+const MIN_CLIENT_VERSION = process.env.MIN_CLIENT_VERSION || "2.0.8";
 const MAX_PLAYERS_PER_ROOM = 8;
 const MAX_MESSAGE_BYTES = 4096;
 const MAX_BUFFERED_STATE_BYTES = 64 * 1024;
