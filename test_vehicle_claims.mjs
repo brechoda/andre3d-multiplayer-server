@@ -70,12 +70,12 @@ try {
   oldClient.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.5", room, name: "Old app", character: "andre" });
   const versionError = await oldClient.next((message) => message.type === "error");
   assert.equal(versionError.code, "CLIENT_UPDATE_REQUIRED");
-  assert.equal(versionError.min_version, "2.0.6");
-  first.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.6", room, name: "Tester1", character: "gorece" });
+  assert.equal(versionError.min_version, "2.0.7");
+  first.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.7", room, name: "Tester1", character: "gorece" });
   const firstWelcome = await first.next((message) => message.type === "welcome");
-  second.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.6", room, name: "Tester2", character: "gorece" });
+  second.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.7", room, name: "Tester2", character: "gorece" });
   await second.next((message) => message.type === "welcome");
-  dg.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.6", room, name: "DG Tester", character: "dg" });
+  dg.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.0.7", room, name: "DG Tester", character: "dg" });
   const dgWelcome = await dg.next((message) => message.type === "welcome");
   assert.equal(dgWelcome.players.find((player) => player.id === dgWelcome.id)?.character, "dg");
 
