@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.01.13.17",
+  "version": "2026.11.01.12",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -29,6 +29,13 @@
       "kind": "pck",
       "size": 50251748,
       "sha256": "888f30fbddc2cfa2a1d4e1baaf9950e0fdb14fa2a580993d41c97ff261a2d141"
+    },
+    {
+      "path": "audio/hilux_srx_2017_parada_simulacao.wav",
+      "url": "files/audio/hilux_srx_2017_parada_simulacao.wav",
+      "kind": "file",
+      "size": 1058444,
+      "sha256": "8d7f05cc76f4bfa3b8388b62cfe175ad1da360e1124c87a62982f30f573e4b3c"
     }
   ],
   "min_online_version": "2.1.7",
