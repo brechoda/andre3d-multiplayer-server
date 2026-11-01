@@ -14,6 +14,8 @@ const ATTACK_RATE_LIMIT_MS = 180;
 const HIT_RATE_LIMIT_MS = 250;
 const HIT_AFTER_ATTACK_WINDOW_MS = 1400;
 const JUMP_RATE_LIMIT_MS = 250;
+const VOICE_RATE_LIMIT_MS = 35;
+const MAX_VOICE_BASE64_LENGTH = 1200;
 const UPDATES_ROOT = path.resolve(process.cwd(), "updates");
 const VEHICLE_TYPES = new Map([
   ["pop100_01", "pop100"],
@@ -191,6 +193,7 @@ websocketServer.on("connection", (socket) => {
     lastVehicleClaimAt: 0,
     lastAttackAt: 0,
     lastHitAt: 0,
+    lastVoiceAt: 0,
   };
 
   socket.on("message", (raw) => {
@@ -349,6 +352,21 @@ websocketServer.on("connection", (socket) => {
       player.lastStateAt = now;
       player.character = requestedCharacter;
       broadcastState(player.room, player, socket);
+      return;
+    }
+    if (message.type === "voice") {
+      const now = Date.now();
+      const payload = typeof message.data === "string" ? message.data : "";
+      if (!payload || payload.length > MAX_VOICE_BASE64_LENGTH || now - player.lastVoiceAt < VOICE_RATE_LIMIT_MS) return;
+      player.lastVoiceAt = now;
+      broadcast(player.room, {
+        type: "voice",
+        id: player.id,
+        x: player.x,
+        y: player.y,
+        z: player.z,
+        data: payload,
+      }, socket);
       return;
     }
     if (message.type === "combat") {
