@@ -56,7 +56,14 @@ async function waitForServer() {
   for (let attempt = 0; attempt < 50; attempt += 1) {
     try {
       const response = await fetch(`http://127.0.0.1:${port}/health`);
-      if (response.ok) return;
+      if (response.ok) {
+        const manifestResponse = await fetch(`http://127.0.0.1:${port}/updates/manifest.json`);
+        assert.equal(manifestResponse.ok, true);
+        const manifest = await manifestResponse.json();
+        assert.equal(manifest.min_online_version, "2.1.7");
+        assert.ok(manifest.files.some((file) => file.path === "content/Andre3D-runtime-online.pck"));
+        return;
+      }
     } catch {}
     await delay(100);
   }
@@ -71,9 +78,9 @@ try {
   const versionError = await oldClient.next((message) => message.type === "error");
   assert.equal(versionError.code, "CLIENT_UPDATE_REQUIRED");
   assert.equal(versionError.min_version, "2.1.1");
-  first.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.1.1", room, name: "Tester1", character: "gorece" });
+  first.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.1.1", room, name: "Andre Tester", character: "andre" });
   const firstWelcome = await first.next((message) => message.type === "welcome");
-  second.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.1.1", room, name: "Tester2", character: "gorece" });
+  second.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.1.1", room, name: "Gorece Tester", character: "gorece" });
   await second.next((message) => message.type === "welcome");
   dg.send({ type: "join", build: "andre3d-mp-v4", app_version: "2.1.1", room, name: "DG Tester", character: "dg" });
   const dgWelcome = await dg.next((message) => message.type === "welcome");
@@ -155,6 +162,7 @@ try {
   assert.equal((await second.next((message) => message.type === "vehicle_claim_result")).granted, true);
 
   second.send({ type: "vehicle_release", vehicle_id: "hilux_01" });
+
   dg.close();
   second.close();
   first.close();
