@@ -1,5 +1,5 @@
 {
-  "version": "2026.10.31.9",
+  "version": "2026.10.31.11",
   "min_app_version": "2.0.5",
   "files": [
     {
@@ -14,7 +14,7 @@
       "url": "files/config/spawn.json",
       "kind": "file",
       "size": 531,
-      "sha256": "59464c8016036baa2e6f0eefe8833f01a4a8645992294cd66818e6a810d23e3e"
+      "sha256": "91d7b7b2620f61a669ebb74831393cf86aa7566b8fc959528e382b9d1fc919d3"
     }
   ],
   "min_online_version": "2.1.1",
