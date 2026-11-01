@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.01.12",
+  "version": "2026.11.01.13",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -18,10 +18,10 @@
     },
     {
       "path": "content/Andre3D-map.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/online-v2.1.17/Andre3D-map-2.1.17-367.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.1.18/Andre3D-map-corrected-2.1.18.pck",
       "kind": "pck",
-      "size": 149499300,
-      "sha256": "536c8eeec1cea4a45e3c5f2945435089a86fe937de52c5cc4f5ebcc9bacef929"
+      "size": 151005480,
+      "sha256": "73d2bdbcdf0d5f8ef32d05378b846ea7d4ab6abbecb747ac0fc83224af320217"
     },
     {
       "path": "content/Andre3D-runtime-online-2.1.13.pck",
@@ -40,11 +40,11 @@
   ],
   "min_online_version": "2.1.7",
   "client": {
-    "version": "2.1.17",
-    "code": 27,
-    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/online-v2.1.17/Andre3D-2.1.17-ultra-low-367.apk",
-    "size": 124622888,
-    "sha256": "942dce54165254834e46896ac1fecaef9aa1f14d514f4b32066f115e45b3aeff",
+    "version": "2.1.18",
+    "code": 28,
+    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/apk-v2.1.18/Andre3D-2.1.18.apk",
+    "size": 124829420,
+    "sha256": "d6e2177686dda8ac22a102a727a41b884d09bcba0e08d62aecbb61143f573f02",
     "mandatory_online": true
   }
 }
