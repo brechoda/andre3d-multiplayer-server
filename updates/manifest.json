@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.01.13",
+  "version": "2026.11.01.14",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -13,8 +13,8 @@
       "path": "config/spawn.json",
       "url": "files/config/spawn.json",
       "kind": "file",
-      "size": 531,
-      "sha256": "91d7b7b2620f61a669ebb74831393cf86aa7566b8fc959528e382b9d1fc919d3"
+      "size": 621,
+      "sha256": "de38961bcef438014db40a3b717608a6430c0f2c7d1cd8206f6072c258a01982"
     },
     {
       "path": "content/Andre3D-map.pck",
