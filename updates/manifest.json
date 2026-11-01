@@ -1,6 +1,6 @@
 {
-  "version": "2026.11.01.03",
-  "min_app_version": "2.1.6",
+  "version": "2026.11.01.04",
+  "min_app_version": "2.1.7",
   "files": [
     {
       "path": "config/tuning.json",
@@ -24,13 +24,13 @@
       "sha256": "673f1fd1b9952ed8a9d8b645d413430330e82b7568e0ebfd6339a0b5bc65b384"
     }
   ],
-  "min_online_version": "2.1.6",
+  "min_online_version": "2.1.7",
   "client": {
-    "version": "2.1.6",
-    "code": 16,
-    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.1.4/Andre3D-2.1.6.apk",
-    "size": 76892128,
-    "sha256": "a0abe6d69739354db72df8296e5a93a210136947597bd42ac9cbd62baaf537ae",
+    "version": "2.1.7",
+    "code": 17,
+    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.1.4/Andre3D-2.1.7.apk",
+    "size": 76896224,
+    "sha256": "2a50f400e7c83af294f275b72321bad3d4940dd955596e2c148bbec2b7e32a1e",
     "mandatory_online": true
   }
 }
