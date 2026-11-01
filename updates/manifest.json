@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.01.10",
+  "version": "2026.11.01.11",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -24,11 +24,11 @@
       "sha256": "673f1fd1b9952ed8a9d8b645d413430330e82b7568e0ebfd6339a0b5bc65b384"
     },
     {
-      "path": "content/Andre3D-runtime-online-2.1.12.pck",
-      "url": "files/content/Andre3D-runtime-online-2.1.12.pck",
+      "path": "content/Andre3D-runtime-online-2.1.13.pck",
+      "url": "files/content/Andre3D-runtime-online-2.1.13.pck",
       "kind": "pck",
-      "size": 50251796,
-      "sha256": "8e33bb05af40212ab6cfb7c1cebce759f325c0f38b65227463c1fbdc43a5bc8b"
+      "size": 50251748,
+      "sha256": "888f30fbddc2cfa2a1d4e1baaf9950e0fdb14fa2a580993d41c97ff261a2d141"
     }
   ],
   "min_online_version": "2.1.7",
