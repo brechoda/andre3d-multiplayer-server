@@ -68,6 +68,7 @@ function playerState(player) {
     vehicle_vy: player.vehicle_vy,
     vehicle_vz: player.vehicle_vz,
     vehicle_audio: player.vehicle_audio,
+    vehicle_wheelie: player.vehicle_wheelie,
     character: player.character,
   };
 }
@@ -186,6 +187,7 @@ websocketServer.on("connection", (socket) => {
     vehicle_vy: 0,
     vehicle_vz: 0,
     vehicle_audio: "off",
+    vehicle_wheelie: 0,
     character: "andre",
     lastStateAt: 0,
     lastJumpAt: 0,
@@ -228,7 +230,7 @@ websocketServer.on("connection", (socket) => {
       player.room = room;
       room.players.set(player.id, player);
       socket.send(JSON.stringify({ type: "welcome", id: player.id, room: room.code, players: roomState(room), maxPlayers: MAX_PLAYERS_PER_ROOM }));
-      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, seq: 0, vx: 0, vy: 0, vz: 0, running: false, latency_ms: 0, vehicle: "on_foot", vehicle_id: "", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, vehicle_vx: 0, vehicle_vy: 0, vehicle_vz: 0, vehicle_audio: "off", character: player.character } }, socket);
+      broadcast(room, { type: "player_joined", player: { id: player.id, name: player.name, x: 0, y: 0, z: 0, ry: 0, seq: 0, vx: 0, vy: 0, vz: 0, running: false, latency_ms: 0, vehicle: "on_foot", vehicle_id: "", riding: false, vehicle_x: 0, vehicle_y: 0, vehicle_z: 0, vehicle_ry: 0, vehicle_vx: 0, vehicle_vy: 0, vehicle_vz: 0, vehicle_audio: "off", vehicle_wheelie: 0, character: player.character } }, socket);
       return;
     }
 
@@ -295,6 +297,7 @@ websocketServer.on("connection", (socket) => {
       if (message.running !== undefined && typeof message.running !== "boolean") return;
       const vehicleValues = [message.vehicle_x, message.vehicle_y, message.vehicle_z, message.vehicle_ry, message.vehicle_vx, message.vehicle_vy, message.vehicle_vz];
       if (!vehicleValues.every(isFiniteNumber) || !isFiniteNumber(message.latency_ms)) return;
+      if (message.vehicle_wheelie !== undefined && !isFiniteNumber(message.vehicle_wheelie)) return;
       const allowedAudio = new Set(["off", "idle", "accel", "decel"]);
       const requestedAudio = typeof message.vehicle_audio === "string" ? message.vehicle_audio : "off";
       if (!allowedAudio.has(requestedAudio)) return;
@@ -322,6 +325,7 @@ websocketServer.on("connection", (socket) => {
           player.vehicle_id = "";
           player.riding = false;
           player.vehicle_audio = "off";
+          player.vehicle_wheelie = 0;
           player.stateSequence = sequence;
           player.lastStateAt = now;
           broadcastState(player.room, player, socket);
@@ -348,6 +352,9 @@ websocketServer.on("connection", (socket) => {
       player.vehicle_vy = clamp(message.vehicle_vy, -60, 60);
       player.vehicle_vz = clamp(message.vehicle_vz, -60, 60);
       player.vehicle_audio = player.riding ? requestedAudio : "off";
+      player.vehicle_wheelie = player.riding && (player.vehicle === "pop100" || player.vehicle === "wayfarer")
+        ? clamp(isFiniteNumber(message.vehicle_wheelie) ? message.vehicle_wheelie : 0, 0, 0.72)
+        : 0;
       player.stateSequence = sequence;
       player.lastStateAt = now;
       player.character = requestedCharacter;
