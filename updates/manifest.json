@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.01.06",
+  "version": "2026.11.01.07",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -24,20 +24,20 @@
       "sha256": "673f1fd1b9952ed8a9d8b645d413430330e82b7568e0ebfd6339a0b5bc65b384"
     },
     {
-      "path": "content/Andre3D-runtime-online.pck",
-      "url": "files/content/Andre3D-runtime-online.pck",
+      "path": "content/Andre3D-runtime-online-2.1.9.pck",
+      "url": "files/content/Andre3D-runtime-online-2.1.9.pck",
       "kind": "pck",
-      "size": 50243552,
-      "sha256": "4995a2ead0a71f5e60685678d985db29e9d34ed58fa625ca87c5bccef2c40a7a"
+      "size": 50244112,
+      "sha256": "c365cd842b2e8055decf012cd61d9736e6a9fc212523755f10a068c3a0992cc4"
     }
   ],
   "min_online_version": "2.1.7",
   "client": {
-    "version": "2.1.8",
-    "code": 18,
-    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/online-v2.1.8/Andre3D-2.1.8.apk",
+    "version": "2.1.9",
+    "code": 19,
+    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/online-v2.1.9/Andre3D-2.1.9.apk",
     "size": 76896216,
-    "sha256": "4f0b0e84ebd5c42f764340cc992fcbe23161e58122af34f02bbbe23e367c2a3b",
+    "sha256": "ba7152a0001fe5f56f61e4fc6e790483b26982bed26f53b31855182295fa7c8b",
     "mandatory_online": true
   }
 }
