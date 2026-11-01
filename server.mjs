@@ -21,6 +21,7 @@ const VEHICLE_TYPES = new Map([
   ["pop100_01", "pop100"],
   ["wayfarer_01", "wayfarer"],
   ["hilux_01", "hilux"],
+  ["fiatuno_01", "fiatuno"],
 ]);
 const CHARACTERS = new Set(["andre", "gorece", "dg"]);
 const ATTACK_ANIMATIONS = new Set(["FightA_1", "FightA_2", "FightA_3"]);
