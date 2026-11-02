@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.02.4",
+  "version": "2026.11.02.5",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -18,12 +18,10 @@
     },
     {
       "path": "content/Andre3D-map.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.1.18/Andre3D-map-corrected-2.1.18.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-industrial.pck",
       "kind": "pck",
-      "size": 151005480,
-      "sha256": "73d2bdbcdf0d5f8ef32d05378b846ea7d4ab6abbecb747ac0fc83224af320217",
-      "optional": true,
-      "legacy": true
+      "size": 54325236,
+      "sha256": "f1e6dfbd51b8f67e6786f1516d4eb9fe19561aedc679cf6ec10c6738c8aa2634"
     },
     {
       "path": "content/Andre3D-runtime-online-2.1.13.pck",
@@ -38,7 +36,18 @@
       "kind": "file",
       "size": 1058444,
       "sha256": "8d7f05cc76f4bfa3b8388b62cfe175ad1da360e1124c87a62982f30f573e4b3c"
-    },
+    }
+  ],
+  "min_online_version": "2.1.7",
+  "client": {
+    "version": "2.1.21",
+    "code": 31,
+    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/apk-v2.1.21/Andre3D-2.1.21.apk",
+    "size": 130492972,
+    "sha256": "e0f96db76317eb766d49171a1d93d7f81e45f7015948de4c9f0db8f84fa213c6",
+    "mandatory_online": true
+  },
+  "map_regions": [
     {
       "path": "content/Andre3D-map-industrial.pck",
       "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-industrial.pck",
@@ -66,14 +75,5 @@
       "size": 57204764,
       "sha256": "9eabf15db115228aabfb88460cf514cba8eb1c551fc90f3223c3848f99d93ca1"
     }
-  ],
-  "min_online_version": "2.1.7",
-  "client": {
-    "version": "2.1.21",
-    "code": 31,
-    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/apk-v2.1.21/Andre3D-2.1.21.apk",
-    "size": 130492972,
-    "sha256": "e0f96db76317eb766d49171a1d93d7f81e45f7015948de4c9f0db8f84fa213c6",
-    "mandatory_online": true
-  }
+  ]
 }
