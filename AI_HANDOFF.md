@@ -42,7 +42,7 @@ O servidor mantém salas e jogadores, retransmite estados e valida regras que n�
 - sequência de estados e relay imediato;
 - pulo como evento com limite de 250 ms;
 - posse exclusiva de veículos por sala;
-- IDs estáveis de veículos: `pop100_01`, `wayfarer_01`, `hilux_01`;
+- IDs estáveis de veículos: `pop100_01`, `wayfarer_01`, `hilux_01`, `fiatuno_01`;
 - DG pode usar Pop 100 e Wayfarer, mas não pode reservar ou pilotar a Hilux;
 - eventos de combate têm limite de frequência, ataque recente, alcance e mesma sala.
 
@@ -92,9 +92,9 @@ O bloco `client` do manifesto informa o APK mais novo:
 - `url`: asset de GitHub Release;
 - `size`: tamanho do APK publicado;
 - `sha256`: hash do mesmo APK;
-- `mandatory_online`: indica que a versão é necessária para multiplayer.
+- `mandatory_online`: metadado; o cliente atual não força a instalação do APK por esse campo.
 
-O campo `min_online_version` deve ser igual à menor versão que o servidor aceita. O APK atual está em GitHub Release `v2.1.1` e o asset é `Andre3D-2.1.1.apk`.
+O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual está na release `apk-v2.1.19` e o asset é `Andre3D-2.1.19.apk`.
 
 Quando um novo APK for criado, primeiro publique o asset no GitHub Release e só depois atualize o manifesto. O hash deve ser calculado no arquivo final publicado:
 
@@ -104,7 +104,7 @@ stat -c '%s' "$APK"
 sha256sum "$APK"
 ```
 
-Depois atualize também `MIN_CLIENT_VERSION` ou a variável correspondente no ambiente Render. O servidor deve exigir a nova versão somente quando o asset estiver disponível para download.
+Se a nova versão passar a ser obrigatória para multiplayer, atualize também `MIN_CLIENT_VERSION` ou a variável correspondente no ambiente Render. O servidor só deve exigir a nova versão quando o asset estiver disponível para download.
 
 ## Testes
 
@@ -142,10 +142,10 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 ## Estado atual entregue
 
 - Build: `andre3d-mp-v4`.
-- Versão mínima online: `2.1.1`.
-- Manifesto atual: `2026.10.31.9`.
-- APK atual: `2.1.1`, código Android `13`, package id `com.manus.andre3d.next`.
+- Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
+- Manifesto atual: `2026.11.02.1`.
+- APK atual: `2.1.19`, código Android `29`, package id `com.manus.andre3d.next`.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
-- Commit do gate/manifesto: `64f9239`.
+- Release pública do APK: `apk-v2.1.19`.
 
 Mantenha esta documentação atualizada sempre que mudar endpoint, protocolo, versão mínima, fluxo de release, formato do manifesto ou comando de deploy.

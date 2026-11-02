@@ -14,7 +14,7 @@ O cliente publica o estado numerado a 30 Hz, com posição, velocidade e latênc
 
 ## Veículos compartilhados
 
-Cada veículo da cena tem um ID estável (`pop100_01`, `wayfarer_01` ou `hilux_01`). O servidor reserva cada assento exclusivamente por sala, trata pedidos `vehicle_claim` e liberações `vehicle_release`, e retransmite o ID e a posição do veículo junto ao estado do jogador. Os clientes remotos atualizam a instância de veículo já presente na cena; não criam outro carro ou moto para representar o motorista.
+Cada veículo da cena tem um ID estável (`pop100_01`, `wayfarer_01`, `hilux_01` ou `fiatuno_01`). O servidor reserva cada assento exclusivamente por sala, trata pedidos `vehicle_claim` e liberações `vehicle_release`, e retransmite o ID e a posição do veículo junto ao estado do jogador. Os clientes remotos atualizam a instância de veículo já presente na cena; não criam outro carro ou moto para representar o motorista.
 
 ## Personagem DG
 
