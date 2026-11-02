@@ -1,8 +1,8 @@
 {
-  "version": 2,
+  "version": 3,
   "map": "liberty_city",
   "map_region": "industrial",
-  "spawn_revision": "regional-industrial-04",
+  "spawn_revision": "regional-05",
   "player": {
     "position": [
       677.6,
@@ -51,6 +51,164 @@
         850.7
       ],
       "rotation_y": 90.0
+    }
+  },
+  "regional_spawns": {
+    "industrial": {
+      "player": {
+        "position": [
+          677.6,
+          80.0,
+          850.7
+        ],
+        "rotation_y": 90.0
+      },
+      "gorece": {
+        "position": [
+          682.6,
+          80.0,
+          850.7
+        ],
+        "rotation_y": 90.0
+      },
+      "vehicles": {
+        "pop100_01": {
+          "position": [
+            667.6,
+            78.6,
+            850.7
+          ],
+          "rotation_y": 90.0
+        },
+        "wayfarer_01": {
+          "position": [
+            672.6,
+            78.9,
+            850.7
+          ],
+          "rotation_y": 90.0
+        },
+        "hilux_01": {
+          "position": [
+            700.3,
+            79.0,
+            851.7
+          ],
+          "rotation_y": 90.0
+        },
+        "fiatuno_01": {
+          "position": [
+            657.6,
+            78.5,
+            850.7
+          ],
+          "rotation_y": 90.0
+        }
+      }
+    },
+    "islands": {
+      "player": {
+        "position": [
+          -1155.6,
+          80.0,
+          55.4
+        ],
+        "rotation_y": 90.0
+      },
+      "gorece": {
+        "position": [
+          -1150.6,
+          80.0,
+          55.4
+        ],
+        "rotation_y": 90.0
+      },
+      "vehicles": {
+        "pop100_01": {
+          "position": [
+            -1165.6,
+            78.6,
+            55.4
+          ],
+          "rotation_y": 90.0
+        },
+        "wayfarer_01": {
+          "position": [
+            -1160.6,
+            78.9,
+            55.4
+          ],
+          "rotation_y": 90.0
+        },
+        "hilux_01": {
+          "position": [
+            -1132.9,
+            79.0,
+            56.4
+          ],
+          "rotation_y": 90.0
+        },
+        "fiatuno_01": {
+          "position": [
+            -1175.6,
+            78.5,
+            55.4
+          ],
+          "rotation_y": 90.0
+        }
+      }
+    },
+    "center": {
+      "player": {
+        "position": [
+          13.9,
+          80.0,
+          517.0
+        ],
+        "rotation_y": 90.0
+      },
+      "gorece": {
+        "position": [
+          18.9,
+          80.0,
+          517.0
+        ],
+        "rotation_y": 90.0
+      },
+      "vehicles": {
+        "pop100_01": {
+          "position": [
+            3.9,
+            78.6,
+            517.0
+          ],
+          "rotation_y": 90.0
+        },
+        "wayfarer_01": {
+          "position": [
+            8.9,
+            78.9,
+            517.0
+          ],
+          "rotation_y": 90.0
+        },
+        "hilux_01": {
+          "position": [
+            36.6,
+            79.0,
+            518.0
+          ],
+          "rotation_y": 90.0
+        },
+        "fiatuno_01": {
+          "position": [
+            -6.1,
+            78.5,
+            517.0
+          ],
+          "rotation_y": 90.0
+        }
+      }
     }
   }
 }
