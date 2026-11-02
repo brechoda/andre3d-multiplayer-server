@@ -1,13 +1,13 @@
 {
-  "version": "2026.11.02.9",
+  "version": "2026.11.02.10",
   "min_app_version": "2.1.7",
   "files": [
     {
       "path": "config/tuning.json",
       "url": "files/config/tuning.json",
       "kind": "file",
-      "size": 10476,
-      "sha256": "6d9ac9e461c80317f12c29a631c6a4d33487b83f2b4a00573c08428c01388726"
+      "size": 10477,
+      "sha256": "66b531bf17e8910c5720d62c59f4d9cc80d8a0bef8a1751887ef03a7f6d93a0c"
     },
     {
       "path": "config/spawn.json",
