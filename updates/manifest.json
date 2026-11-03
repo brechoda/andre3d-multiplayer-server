@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.03.16",
+  "version": "2026.11.03.17",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -13,8 +13,8 @@
       "path": "config/spawn.json",
       "url": "files/config/spawn.json",
       "kind": "file",
-      "size": 3701,
-      "sha256": "ee569afeb4049e078fa008140789cf60e92bdcea3be1709861726e9a496dce49"
+      "size": 3768,
+      "sha256": "2722c929ddfb885247614fb3f30b4301fb23224c330bccf8337a3a93a93ddcc7"
     },
     {
       "path": "config/remote_ui.json",
@@ -47,11 +47,11 @@
   ],
   "min_online_version": "2.1.7",
   "client": {
-    "version": "2.2.5",
-    "code": 37,
-    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/apk-v2.2.5/Andre3D-2.2.5.apk",
-    "size": 125382086,
-    "sha256": "fc37e771fb675d94a5a273d3521a955c2a833f874ec210c12a90f40f029e1220",
+    "version": "2.2.6",
+    "code": 38,
+    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/apk-v2.2.6/Andre3D-2.2.6.apk",
+    "size": 131065794,
+    "sha256": "071b012c6a98cacc2889f5f716012d820b0c591d15e6e8ecc3951bc7e7cbe52a",
     "mandatory_online": true
   },
   "map_regions": [
