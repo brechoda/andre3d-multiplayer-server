@@ -18,7 +18,7 @@
     },
     {
       "path": "config/remote_ui.json",
-      "url": "files/config/remote_ui.json",
+      "url": "files/config/remote_ui.json?rev=default-1",
       "kind": "file",
       "size": 3754,
       "sha256": "a9dc7fa8a705646fb838df9bfc815b3c206bede98c642e8bd133108bd0e28c2c"
