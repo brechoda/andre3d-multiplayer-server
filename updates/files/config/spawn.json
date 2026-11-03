@@ -1,8 +1,8 @@
 {
-  "version": 3,
+  "version": 4,
   "map": "liberty_city",
   "map_region": "industrial",
-  "spawn_revision": "regional-05",
+  "spawn_revision": "regional-06",
   "player": {
     "position": [
       677.6,
@@ -23,7 +23,7 @@
     "pop100_01": {
       "position": [
         667.6,
-        78.6,
+        -0.35,
         850.7
       ],
       "rotation_y": 90.0
@@ -31,7 +31,7 @@
     "wayfarer_01": {
       "position": [
         672.6,
-        78.9,
+        -0.47,
         850.7
       ],
       "rotation_y": 90.0
@@ -39,7 +39,7 @@
     "hilux_01": {
       "position": [
         700.3,
-        79.0,
+        -0.68,
         851.7
       ],
       "rotation_y": 90.0
@@ -47,7 +47,7 @@
     "fiatuno_01": {
       "position": [
         657.6,
-        78.5,
+        -1.23,
         850.7
       ],
       "rotation_y": 90.0
@@ -75,7 +75,7 @@
         "pop100_01": {
           "position": [
             667.6,
-            78.6,
+            -0.35,
             850.7
           ],
           "rotation_y": 90.0
@@ -83,7 +83,7 @@
         "wayfarer_01": {
           "position": [
             672.6,
-            78.9,
+            -0.47,
             850.7
           ],
           "rotation_y": 90.0
@@ -91,7 +91,7 @@
         "hilux_01": {
           "position": [
             700.3,
-            79.0,
+            -0.68,
             851.7
           ],
           "rotation_y": 90.0
@@ -99,7 +99,7 @@
         "fiatuno_01": {
           "position": [
             657.6,
-            78.5,
+            -1.23,
             850.7
           ],
           "rotation_y": 90.0
@@ -163,7 +163,7 @@
         "position": [
           13.9,
           80.0,
-          517.0
+          497.0
         ],
         "rotation_y": 90.0
       },
@@ -171,7 +171,7 @@
         "position": [
           18.9,
           80.0,
-          517.0
+          497.0
         ],
         "rotation_y": 90.0
       },
@@ -179,32 +179,32 @@
         "pop100_01": {
           "position": [
             3.9,
-            78.6,
-            517.0
+            0.36,
+            497.0
           ],
           "rotation_y": 90.0
         },
         "wayfarer_01": {
           "position": [
             8.9,
-            78.9,
-            517.0
+            0.39,
+            497.0
           ],
           "rotation_y": 90.0
         },
         "hilux_01": {
           "position": [
             36.6,
-            79.0,
-            518.0
+            7.44,
+            498.0
           ],
           "rotation_y": 90.0
         },
         "fiatuno_01": {
           "position": [
             -6.1,
-            78.5,
-            517.0
+            -0.2,
+            497.0
           ],
           "rotation_y": 90.0
         }

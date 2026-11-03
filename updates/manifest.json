@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.03.14",
+  "version": "2026.11.03.15",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -13,8 +13,8 @@
       "path": "config/spawn.json",
       "url": "files/config/spawn.json",
       "kind": "file",
-      "size": 3693,
-      "sha256": "d18d4110e31970a763618b8d86a7e2e83a67404a121b8ef94bb0125f3bf6cbe2"
+      "size": 3701,
+      "sha256": "ee569afeb4049e078fa008140789cf60e92bdcea3be1709861726e9a496dce49"
     },
     {
       "path": "config/remote_ui.json",
@@ -25,10 +25,10 @@
     },
     {
       "path": "content/Andre3D-map.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-industrial.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.1-spawn-fix/Andre3D-map-industrial.pck",
       "kind": "pck",
-      "size": 54325236,
-      "sha256": "f1e6dfbd51b8f67e6786f1516d4eb9fe19561aedc679cf6ec10c6738c8aa2634"
+      "size": 54334712,
+      "sha256": "2c856d1e8cc781311e039e06ef204a17fac7f677ae26c7cc9257db69fa90ec47"
     },
     {
       "path": "content/Andre3D-runtime-online-2.1.13.pck",
@@ -57,21 +57,21 @@
   "map_regions": [
     {
       "path": "content/Andre3D-map-industrial.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-industrial.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.1-spawn-fix/Andre3D-map-industrial.pck",
       "kind": "pck",
       "region": "industrial",
       "optional": false,
-      "size": 54325236,
-      "sha256": "f1e6dfbd51b8f67e6786f1516d4eb9fe19561aedc679cf6ec10c6738c8aa2634"
+      "size": 54334712,
+      "sha256": "2c856d1e8cc781311e039e06ef204a17fac7f677ae26c7cc9257db69fa90ec47"
     },
     {
       "path": "content/Andre3D-map-center.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-center.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.1-spawn-fix/Andre3D-map-center.pck",
       "kind": "pck",
       "region": "center",
       "optional": true,
-      "size": 62817264,
-      "sha256": "1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356"
+      "size": 62826740,
+      "sha256": "93edca3a3cd8f3f9bffabe3da117ac559e8416d3f32e5e6a1fdcf3ea166d17e1"
     },
     {
       "path": "content/Andre3D-map-islands.pck",

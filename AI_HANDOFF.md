@@ -94,7 +94,7 @@ O bloco `client` do manifesto informa o APK mais novo:
 - `sha256`: hash do mesmo APK;
 - `mandatory_online`: metadado; o cliente atual não força a instalação do APK por esse campo.
 
-O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual está na release `apk-v2.1.19` e o asset é `Andre3D-2.1.19.apk`.
+O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual é `2.2.4`, código Android `36`, na release `apk-v2.2.4` e asset `Andre3D-2.2.4.apk`.
 
 Quando um novo APK for criado, primeiro publique o asset no GitHub Release e só depois atualize o manifesto. O hash deve ser calculado no arquivo final publicado:
 
@@ -143,9 +143,10 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 
 - Build: `andre3d-mp-v4`.
 - Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
-- Manifesto atual: `2026.11.02.1`.
-- APK atual: `2.1.19`, código Android `29`, package id `com.manus.andre3d.next`.
+- Manifesto atual: `2026.11.03.15`; configuração de spawn: `regional-06`.
+- APK atual: `2.2.4`, código Android `36`, package id `com.manus.andre3d.next`.
+- PCKs regionais CENTRO e INDUSTRIAL: release `map-v2.2.1-spawn-fix`, com posições de spawn corrigidas.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
-- Release pública do APK: `apk-v2.1.19`.
+- Release pública do APK: `apk-v2.2.4`.
 
 Mantenha esta documentação atualizada sempre que mudar endpoint, protocolo, versão mínima, fluxo de release, formato do manifesto ou comando de deploy.
