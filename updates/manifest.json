@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.03.2",
+  "version": "2026.11.03.3",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -15,6 +15,15 @@
       "kind": "file",
       "size": 3768,
       "sha256": "2722c929ddfb885247614fb3f30b4301fb23224c330bccf8337a3a93a93ddcc7"
+    },
+    {
+      "path": "content/Andre3D-map-center.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-center.pck",
+      "kind": "pck",
+      "region": "center",
+      "optional": false,
+      "size": 62817264,
+      "sha256": "1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356"
     },
     {
       "path": "config/remote_ui.json",
@@ -49,13 +58,13 @@
   },
   "map_regions": [
     {
-      "path": "content/Andre3D-map-islands.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-islands.pck",
+      "path": "content/Andre3D-map-center.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-center.pck",
       "kind": "pck",
-      "region": "islands",
-      "optional": true,
-      "size": 57204764,
-      "sha256": "9eabf15db115228aabfb88460cf514cba8eb1c551fc90f3223c3848f99d93ca1"
+      "region": "center",
+      "optional": false,
+      "size": 62817264,
+      "sha256": "1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356"
     }
   ]
 }
