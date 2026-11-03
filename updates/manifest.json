@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.02.10",
+  "version": "2026.11.02.11",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -15,6 +15,13 @@
       "kind": "file",
       "size": 3693,
       "sha256": "d18d4110e31970a763618b8d86a7e2e83a67404a121b8ef94bb0125f3bf6cbe2"
+    },
+    {
+      "path": "config/remote_ui.json",
+      "url": "files/config/remote_ui.json",
+      "kind": "file",
+      "size": 3754,
+      "sha256": "a9dc7fa8a705646fb838df9bfc815b3c206bede98c642e8bd133108bd0e28c2c"
     },
     {
       "path": "content/Andre3D-map.pck",

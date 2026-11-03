@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "revision": "default-1",
+  "elements": {
+    "menu.panel": { "min_size": [460, 520], "scale": 1.0 },
+    "menu.map_selector": {
+      "visible": true,
+      "font_size": 15,
+      "items": [
+        "INDUSTRIAL — principal, menor pacote",
+        "CENTRO — bairros comerciais"
+      ]
+    },
+    "menu.subtitle": { "text": "ESCOLHA COMO JOGAR", "font_size": 18, "text_color": "#D9F7F4" },
+    "menu.status": { "visible": true, "font_size": 14, "text_color": "#D2E8E8" },
+    "menu.graphics_button": { "text": "CONFIGURAÇÕES GRÁFICAS", "font_size": 18 },
+    "menu.character_title": { "text": "PERSONAGEM", "font_size": 16 },
+    "menu.character_list": { "visible": true, "scale": 1.0 },
+    "menu.character.andre": { "visible": true, "text": "ANDRÉ", "font_size": 18 },
+    "menu.character.gorece": { "visible": true, "text": "GORECE", "font_size": 18 },
+    "menu.character.dg": { "visible": true, "text": "DG", "font_size": 18 },
+    "menu.start_button": { "text": "ENTRAR NO JOGO", "font_size": 18 },
+    "menu.footer": {
+      "visible": true,
+      "text": "No online, o outro jogador aparece como personagem escolhido.",
+      "font_size": 13,
+      "text_color": "#B8C8CC"
+    },
+    "menu.download_progress": { "visible": true, "scale": 1.0 },
+    "menu.download_percent": { "visible": true, "font_size": 22, "text_color": "#FFFFFF" },
+    "menu.loading_title": { "visible": true, "font_size": 28, "text_color": "#FFFFFF" },
+    "menu.loading_status": { "visible": true, "font_size": 16, "text_color": "#F6D58A" },
+    "menu.loading_progress": { "visible": true, "scale": 1.0 },
+    "menu.loading_percent": { "visible": true, "font_size": 20, "text_color": "#FFFFFF" },
+    "menu.graphics.panel": { "min_size": [560, 530], "scale": 1.0 },
+    "menu.graphics.title": { "visible": true, "text": "CONFIGURAÇÕES GRÁFICAS", "font_size": 26 },
+    "menu.graphics.info": {
+      "visible": true,
+      "text": "Escolha os níveis e confirme para aplicar.\nO modo automático ajusta aos poucos quando o FPS fica abaixo de 30.",
+      "font_size": 14
+    },
+    "menu.graphics.auto": { "visible": true, "text": "MODO AUTOMÁTICO DE OTIMIZAÇÃO", "font_size": 16 },
+    "hud.root": { "scale": 1.0 },
+    "hud.vehicle_panel": { "visible": true, "font_size": 14, "text_color": "#6BF5D1" },
+    "hud.coordinates": { "visible": true, "font_size": 14, "text_color": "#B8E6FF" },
+    "hud.camera_hint": { "visible": true, "font_size": 14, "text_color": "#BDD7DB" },
+    "hud.touch_joystick": { "visible": true, "scale": 1.0 },
+    "hud.touch_label": { "visible": true, "text": "ARRASTE PARA MOVER", "font_size": 13, "text_color": "#BFE6E8" },
+    "hud.run": { "visible": true, "text": "CORRER", "font_size": 21 },
+    "hud.crouch": { "visible": true, "text": "AGACHAR", "font_size": 21 },
+    "hud.jump": { "visible": true, "text": "PULAR", "font_size": 21 },
+    "hud.action": { "visible": true, "font_size": 21 },
+    "hud.switch": { "visible": true, "font_size": 17 },
+    "hud.ride": { "visible": true, "font_size": 19 },
+    "hud.follow": { "visible": true, "font_size": 19 },
+    "hud.gps": { "visible": true, "scale": 1.0 },
+    "hud.gps.autopilot": { "font_size": 13, "text_color": "#D9F7F4" },
+    "hud.gps.status": { "font_size": 11, "text_color": "#D2E8E8" },
+    "hud.moto.accelerate": { "text": "ACELERAR", "font_size": 16 },
+    "hud.moto.brake": { "text": "FREAR", "font_size": 16 },
+    "hud.hilux.accelerate": { "text": "ACELERAR", "font_size": 16 },
+    "hud.hilux.brake": { "text": "FREAR", "font_size": 16 },
+    "hud.hilux.steer_left": { "text": "ESQUERDA", "font_size": 14 },
+    "hud.hilux.steer_right": { "text": "DIREITA", "font_size": 14 },
+    "hud.chat": { "visible": true, "scale": 1.0 }
+  }
+}
