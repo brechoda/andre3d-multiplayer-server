@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.02.11",
+  "version": "2026.11.02.12",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -47,11 +47,11 @@
   ],
   "min_online_version": "2.1.7",
   "client": {
-    "version": "2.2.0",
-    "code": 32,
-    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/apk-v2.2.0/Andre3D-2.2.0.apk",
-    "size": 130536759,
-    "sha256": "5a86d465e6e78325ecbeb7b6d4a5b36684082a88373905debdcf9a3e720c67b1",
+    "version": "2.2.2",
+    "code": 34,
+    "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/apk-v2.2.2/Andre3D-2.2.2.apk",
+    "size": 124869450,
+    "sha256": "6c65a4b32ad641ff9bf1ca2ae1f3903f7208705594b69946f1d830fba4fe781d",
     "mandatory_online": true
   },
   "map_regions": [
