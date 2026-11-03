@@ -163,6 +163,63 @@ try {
 
   second.send({ type: "vehicle_release", vehicle_id: "hilux_01" });
 
+  // Pull uses the latest player pose, reserves the vehicle, and broadcasts to everyone in-room.
+  first.send({ type: "state", seq: 2, x: 10, y: 2, z: 20, ry: Math.PI / 2,
+    vx: 0, vy: 0, vz: 0, latency_ms: 0,
+    vehicle_x: 10, vehicle_y: 2, vehicle_z: 20, vehicle_ry: Math.PI / 2,
+    vehicle_vx: 0, vehicle_vy: 0, vehicle_vz: 0, riding: false });
+  await second.next((message) => message.type === "snapshot"
+    && message.players.some((player) => player.id === firstWelcome.id && player.seq === 2));
+  first.send({ type: "vehicle_pull", vehicle_id: "wayfarer_01" });
+  const pullResult = await first.next((message) => message.type === "vehicle_pull_result");
+  assert.deepEqual(pullResult, { type: "vehicle_pull_result", vehicle_id: "wayfarer_01", granted: true });
+  const pulledBroadcast = await second.next((message) => message.type === "vehicle_pulled");
+  assert.equal(pulledBroadcast.vehicle_id, "wayfarer_01");
+  assert.ok(Math.abs(pulledBroadcast.x - 5.2) < 1e-9);
+  assert.equal(pulledBroadcast.y, 2);
+  assert.ok(Math.abs(pulledBroadcast.z - 20) < 1e-9);
+  assert.equal(pulledBroadcast.ry, Math.PI / 2);
+  const pulledSelfBroadcast = await first.next((message) => message.type === "vehicle_pulled");
+  assert.deepEqual(pulledSelfBroadcast, pulledBroadcast);
+
+  second.send({ type: "vehicle_pull", vehicle_id: "wayfarer_01" });
+  const occupiedPull = await second.next((message) => message.type === "vehicle_pull_result");
+  assert.equal(occupiedPull.granted, false);
+  assert.equal(occupiedPull.reason, "OCCUPIED");
+  first.send({ type: "vehicle_pull", vehicle_id: "not_a_vehicle" });
+  const unknownPull = await first.next((message) => message.type === "vehicle_pull_result");
+  assert.equal(unknownPull.granted, false);
+  assert.equal(unknownPull.reason, "RATE_LIMITED");
+  await delay(1050);
+  first.send({ type: "vehicle_pull", vehicle_id: "not_a_vehicle" });
+  const unknownPullAfterCooldown = await first.next((message) => message.type === "vehicle_pull_result");
+  assert.equal(unknownPullAfterCooldown.granted, false);
+  assert.equal(unknownPullAfterCooldown.reason, "UNKNOWN_VEHICLE");
+  await delay(1050);
+  first.send({ type: "state", seq: 3, x: 10, y: 2, z: 20, ry: 0,
+    vx: 0, vy: 0, vz: 0, latency_ms: 0,
+    vehicle_x: 10, vehicle_y: 2, vehicle_z: 20, vehicle_ry: 0,
+    vehicle_vx: 0, vehicle_vy: 0, vehicle_vz: 0, vehicle_id: "wayfarer_01", riding: true });
+  await second.next((message) => message.type === "snapshot"
+    && message.players.some((player) => player.id === firstWelcome.id && player.seq === 3 && player.riding));
+  first.send({ type: "vehicle_pull", vehicle_id: "fiatuno_01" });
+  const pilotingPull = await first.next((message) => message.type === "vehicle_pull_result");
+  assert.equal(pilotingPull.granted, false);
+  assert.equal(pilotingPull.reason, "ALREADY_PILOTING");
+
+  first.send({ type: "vehicle_release", vehicle_id: "wayfarer_01" });
+  await delay(1050);
+  first.send({ type: "vehicle_pull", vehicle_id: "pop100_01" });
+  assert.equal((await first.next((message) => message.type === "vehicle_pull_result")).granted, true);
+  await first.next((message) => message.type === "vehicle_pulled" && message.vehicle_id === "pop100_01");
+  await delay(1050);
+  first.send({ type: "vehicle_pull", vehicle_id: "fiatuno_01" });
+  assert.equal((await first.next((message) => message.type === "vehicle_pull_result")).granted, true);
+  await first.next((message) => message.type === "vehicle_pulled" && message.vehicle_id === "fiatuno_01");
+  await delay(1050);
+  second.send({ type: "vehicle_pull", vehicle_id: "pop100_01" });
+  assert.equal((await second.next((message) => message.type === "vehicle_pull_result")).granted, true);
+
   dg.close();
   second.close();
   first.close();

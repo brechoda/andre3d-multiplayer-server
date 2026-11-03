@@ -194,6 +194,7 @@ websocketServer.on("connection", (socket) => {
     lastJumpAt: 0,
     jumpSequence: 0,
     lastVehicleClaimAt: 0,
+    lastVehiclePullAt: 0,
     lastAttackAt: 0,
     lastHitAt: 0,
     lastVoiceAt: 0,
@@ -236,6 +237,51 @@ websocketServer.on("connection", (socket) => {
     }
 
     if (!player.room) return;
+    if (message.type === "vehicle_pull") {
+      const now = Date.now();
+      const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
+      const ownerId = player.room.vehicleOwners.get(vehicleId);
+      let granted = true;
+      let reason = "";
+      if (now - player.lastVehiclePullAt < 1000) {
+        granted = false;
+        reason = "RATE_LIMITED";
+      } else if (!VEHICLE_TYPES.has(vehicleId)) {
+        granted = false;
+        reason = "UNKNOWN_VEHICLE";
+      } else if (player.riding) {
+        granted = false;
+        reason = "ALREADY_PILOTING";
+      } else if (ownerId && ownerId !== player.id) {
+        granted = false;
+        reason = "OCCUPIED";
+      } else if (player.character === "dg" && vehicleId === "hilux_01") {
+        granted = false;
+        reason = "CHARACTER_CANNOT_USE_VEHICLE";
+      }
+      player.lastVehiclePullAt = now;
+      if (granted) {
+        const previousClaim = player.claimedVehicleId;
+        if (previousClaim && previousClaim !== vehicleId && player.room.vehicleOwners.get(previousClaim) === player.id) {
+          player.room.vehicleOwners.delete(previousClaim);
+        }
+        player.room.vehicleOwners.set(vehicleId, player.id);
+        player.claimedVehicleId = vehicleId;
+      }
+      if (socket.readyState === 1) socket.send(JSON.stringify({ type: "vehicle_pull_result", vehicle_id: vehicleId, granted, ...(reason ? { reason } : {}) }));
+      if (granted) {
+        const distance = 4.8;
+        broadcast(player.room, {
+          type: "vehicle_pulled",
+          vehicle_id: vehicleId,
+          x: clamp(player.x - Math.sin(player.ry) * distance, -10000, 10000),
+          y: clamp(player.y, -100, 1000),
+          z: clamp(player.z - Math.cos(player.ry) * distance, -10000, 10000),
+          ry: player.ry,
+        });
+      }
+      return;
+    }
     if (message.type === "vehicle_claim") {
       const now = Date.now();
       const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
