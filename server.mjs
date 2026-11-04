@@ -16,6 +16,7 @@ const HIT_AFTER_ATTACK_WINDOW_MS = 1400;
 const JUMP_RATE_LIMIT_MS = 250;
 const VOICE_RATE_LIMIT_MS = 35;
 const MAX_VOICE_BASE64_LENGTH = 1200;
+const VEHICLE_CLAIM_LEASE_MS = 10000;
 const UPDATES_ROOT = path.resolve(process.cwd(), "updates");
 const VEHICLE_TYPES = new Map([
   ["pop100_01", "pop100"],
@@ -94,12 +95,31 @@ function broadcastState(room, player, except = null) {
   }
 }
 
+function releaseVehicleClaim(player, vehicleId = "") {
+  if (!player.room) return;
+  const id = vehicleId || player.claimedVehicleId;
+  if (id && player.room.vehicleOwners.get(id) === player.id) {
+    player.room.vehicleOwners.delete(id);
+  }
+  if (!vehicleId || player.claimedVehicleId === vehicleId) player.claimedVehicleId = "";
+}
+
+function clearExpiredVehicleOwner(room, vehicleId, now) {
+  const ownerId = room.vehicleOwners.get(vehicleId);
+  if (!ownerId) return null;
+  const owner = room.players.get(ownerId);
+  if (owner == null || (!owner.riding && now - owner.lastVehicleClaimAt > VEHICLE_CLAIM_LEASE_MS)) {
+    room.vehicleOwners.delete(vehicleId);
+    if (owner != null && owner.claimedVehicleId === vehicleId) owner.claimedVehicleId = "";
+    return null;
+  }
+  return ownerId;
+}
+
 function leave(player) {
   if (!player.room) return;
   const room = player.room;
-  if (player.claimedVehicleId && room.vehicleOwners.get(player.claimedVehicleId) === player.id) {
-    room.vehicleOwners.delete(player.claimedVehicleId);
-  }
+  releaseVehicleClaim(player);
   room.players.delete(player.id);
   player.room = null;
   broadcast(room, { type: "player_left", id: player.id });
@@ -240,7 +260,7 @@ websocketServer.on("connection", (socket) => {
     if (message.type === "vehicle_pull") {
       const now = Date.now();
       const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
-      const ownerId = player.room.vehicleOwners.get(vehicleId);
+      const ownerId = clearExpiredVehicleOwner(player.room, vehicleId, now);
       let granted = true;
       let reason = "";
       if (now - player.lastVehiclePullAt < 1000) {
@@ -290,7 +310,7 @@ websocketServer.on("connection", (socket) => {
     if (message.type === "vehicle_claim") {
       const now = Date.now();
       const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
-      const ownerId = player.room.vehicleOwners.get(vehicleId);
+      const ownerId = clearExpiredVehicleOwner(player.room, vehicleId, now);
       const vehicleType = VEHICLE_TYPES.get(vehicleId);
       let granted = true;
       let reason = "";
@@ -320,9 +340,8 @@ websocketServer.on("connection", (socket) => {
     }
     if (message.type === "vehicle_release") {
       const vehicleId = typeof message.vehicle_id === "string" ? message.vehicle_id : "";
-      if (player.claimedVehicleId === vehicleId && player.room.vehicleOwners.get(vehicleId) === player.id) {
-        player.room.vehicleOwners.delete(vehicleId);
-        player.claimedVehicleId = "";
+      if (player.claimedVehicleId === vehicleId) {
+        releaseVehicleClaim(player, vehicleId);
         player.vehicle_id = "";
         player.vehicle = "on_foot";
         player.riding = false;
@@ -392,6 +411,9 @@ websocketServer.on("connection", (socket) => {
         player.vehicle_id = vehicleId;
         player.riding = true;
       } else {
+        if (player.claimedVehicleId && player.room.vehicleOwners.get(player.claimedVehicleId) === player.id) {
+          releaseVehicleClaim(player);
+        }
         player.vehicle = "on_foot";
         player.vehicle_id = "";
         player.riding = false;
