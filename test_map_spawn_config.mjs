@@ -12,13 +12,13 @@ const manifest = JSON.parse(readFileSync(join(root, "updates/manifest.json"), "u
 
 assert.equal(spawn.map, "liberty_city");
 assert.equal(spawn.map_region, "center");
-assert.equal(spawn.spawn_revision, "global-11");
+assert.equal(spawn.spawn_revision, "global-12");
 assert.deepEqual(Object.keys(spawn.regional_spawns), ["center"]);
 
 const center = spawn.regional_spawns.center;
 const expected = {
-  player: [20.73, 4.7448, -22.03],
-  gorece: [20.73, 4.7448, -30.03],
+  player: [184.73, 4.7448, -22.03],
+  gorece: [192.73, 4.7448, -22.03],
   pop100_01: [169.4, -4.5651, -19.6],
   wayfarer_01: [169.4, -4.0747, 30.4],
   hilux_01: [19.4, -0.0723, 280.4],
