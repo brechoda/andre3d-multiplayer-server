@@ -94,7 +94,7 @@ O bloco `client` do manifesto informa o APK mais novo:
 - `sha256`: hash do mesmo APK;
 - `mandatory_online`: metadado; o cliente atual não força a instalação do APK por esse campo.
 
-O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual é `2.2.8`, código Android `40`, na release `apk-v2.2.8` e asset `Andre3D-2.2.8.apk` (125377530 bytes; SHA-256 `92b0b3f302f28fd1e0235c0e9cd09da86c5736562d1d303803480f704eaddafe`).
+O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual é `2.2.9`, código Android `41`, na release `apk-v2.2.9` e asset `Andre3D-2.2.9.apk` (125377562 bytes; SHA-256 `57962d7d66a59baac432a748a69813116bc33eb9e833bc38fda2d71525c195d0`).
 
 Quando um novo APK for criado, primeiro publique o asset no GitHub Release e só depois atualize o manifesto. O hash deve ser calculado no arquivo final publicado:
 
@@ -143,10 +143,10 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 
 - Build: `andre3d-mp-v4`.
 - Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
-- Manifesto atual: `2026.11.04.1`; configuração de spawn: `global-10`, apenas região `center`, verificada contra COL1 do PCK.
-- APK atual: `2.2.8`, código Android `40`, package id `com.manus.andre3d.next`.
+- Manifesto atual: `2026.11.04.2`; configuração de spawn: `global-10`, apenas região `center`, verificada contra COL1 do PCK.
+- APK atual: `2.2.9`, código Android `41`, package id `com.manus.andre3d.next`.
 - PCK de mapa CENTRO: release `map-v2.2.0-regions`, 62.817.264 bytes, SHA-256 `1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356`; o manifesto atual publica apenas esta região.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
-- Release pública do APK: `apk-v2.2.8`.
+- Release pública do APK: `apk-v2.2.9`.
 
 Mantenha esta documentação atualizada sempre que mudar endpoint, protocolo, versão mínima, fluxo de release, formato do manifesto ou comando de deploy.
