@@ -175,7 +175,7 @@ try {
   assert.deepEqual(pullResult, { type: "vehicle_pull_result", vehicle_id: "wayfarer_01", granted: true });
   const pulledBroadcast = await second.next((message) => message.type === "vehicle_pulled");
   assert.equal(pulledBroadcast.vehicle_id, "wayfarer_01");
-  assert.ok(Math.abs(pulledBroadcast.x - 5.2) < 1e-9);
+  assert.ok(Math.abs(pulledBroadcast.x - 8.2) < 1e-9);
   assert.equal(pulledBroadcast.y, 2);
   assert.ok(Math.abs(pulledBroadcast.z - 20) < 1e-9);
   assert.equal(pulledBroadcast.ry, Math.PI / 2);

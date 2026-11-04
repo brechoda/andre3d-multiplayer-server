@@ -270,7 +270,8 @@ websocketServer.on("connection", (socket) => {
       }
       if (socket.readyState === 1) socket.send(JSON.stringify({ type: "vehicle_pull_result", vehicle_id: vehicleId, granted, ...(reason ? { reason } : {}) }));
       if (granted) {
-        const distance = 4.8;
+        // O veículo precisa ficar ao alcance da montagem; não mover o jogador.
+        const distance = 1.8;
         broadcast(player.room, {
           type: "vehicle_pulled",
           vehicle_id: vehicleId,
