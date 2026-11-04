@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "test": "node test_vehicle_claims.mjs && node test_three_online.mjs"
+    "test": "node test_vehicle_claims.mjs && node test_three_online.mjs && node test_map_spawn_config.mjs"
   },
   "dependencies": {
     "ws": "^8.18.0"

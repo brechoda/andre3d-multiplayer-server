@@ -143,9 +143,9 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 
 - Build: `andre3d-mp-v4`.
 - Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
-- Manifesto atual: `2026.11.03.4`; configuração de spawn: `regional-06`.
+- Manifesto atual: `2026.11.04.1`; configuração de spawn: `global-10`, apenas região `center`, verificada contra COL1 do PCK.
 - APK atual: `2.2.8`, código Android `40`, package id `com.manus.andre3d.next`.
-- PCKs regionais CENTRO e INDUSTRIAL: release `map-v2.2.1-spawn-fix`, com posições de spawn corrigidas.
+- PCK de mapa CENTRO: release `map-v2.2.0-regions`, 62.817.264 bytes, SHA-256 `1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356`; o manifesto atual publica apenas esta região.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
 - Release pública do APK: `apk-v2.2.8`.
 

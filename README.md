@@ -28,4 +28,4 @@ Esses eventos sincronizam **animações visuais**; não implementam pontos de vi
 
 ## Testes
 
-Execute `npm test` para iniciar clientes WebSocket concorrentes e verificar identidade DG, acesso às motos, bloqueio da Hilux inclusive via estado forçado, reserva exclusiva, relay imediato, rejeição de sequência antiga e retransmissão única do pulo. No projeto Godot, `tests/multiplayer_two_clients.gd` abre duas cenas completas contra um servidor local e verifica moto, Hilux, pulo remoto e identidade compartilhada do veículo.
+Execute `npm test` para iniciar clientes WebSocket concorrentes e verificar identidade DG, acesso às motos, bloqueio da Hilux inclusive via estado forçado, reserva exclusiva, relay imediato, rejeição de sequência antiga e retransmissão única do pulo. A suíte também verifica que o `spawn.json` publica somente CENTRO, mantém posições regionais iguais às posições padrão e tem tamanho/hash consistentes no manifesto. No projeto Godot, `tests/multiplayer_two_clients.gd` abre duas cenas completas contra um servidor local e verifica moto, Hilux, pulo remoto e identidade compartilhada do veículo.
