@@ -108,7 +108,10 @@ function clearExpiredVehicleOwner(room, vehicleId, now) {
   const ownerId = room.vehicleOwners.get(vehicleId);
   if (!ownerId) return null;
   const owner = room.players.get(ownerId);
-  if (owner == null || (!owner.riding && now - owner.lastVehicleClaimAt > VEHICLE_CLAIM_LEASE_MS)) {
+  const lastActivity = owner == null ? 0 : Math.max(owner.lastStateAt, owner.lastVehicleClaimAt);
+  // Um aplicativo suspenso pode manter o socket aberto e deixar riding=true.
+  // A ausência de estados recentes é suficiente para considerar a reserva abandonada.
+  if (owner == null || now - lastActivity > VEHICLE_CLAIM_LEASE_MS) {
     room.vehicleOwners.delete(vehicleId);
     if (owner != null && owner.claimedVehicleId === vehicleId) owner.claimedVehicleId = "";
     return null;
