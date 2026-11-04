@@ -272,13 +272,17 @@ websocketServer.on("connection", (socket) => {
       if (granted) {
         // O veículo precisa ficar ao alcance da montagem; não mover o jogador.
         const distance = 1.8;
+        const pullX = isFiniteNumber(message.x) ? clamp(message.x, -10000, 10000) : player.x;
+        const pullY = isFiniteNumber(message.y) ? clamp(message.y, -100, 1000) : player.y;
+        const pullZ = isFiniteNumber(message.z) ? clamp(message.z, -10000, 10000) : player.z;
+        const pullYaw = isFiniteNumber(message.ry) ? clamp(message.ry, -Math.PI * 4, Math.PI * 4) : player.ry;
         broadcast(player.room, {
           type: "vehicle_pulled",
           vehicle_id: vehicleId,
-          x: clamp(player.x - Math.sin(player.ry) * distance, -10000, 10000),
-          y: clamp(player.y, -100, 1000),
-          z: clamp(player.z - Math.cos(player.ry) * distance, -10000, 10000),
-          ry: player.ry,
+          x: clamp(pullX - Math.sin(pullYaw) * distance, -10000, 10000),
+          y: pullY,
+          z: clamp(pullZ - Math.cos(pullYaw) * distance, -10000, 10000),
+          ry: pullYaw,
         });
       }
       return;
