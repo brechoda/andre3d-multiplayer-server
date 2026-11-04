@@ -61,7 +61,7 @@ async function waitForServer() {
         assert.equal(manifestResponse.ok, true);
         const manifest = await manifestResponse.json();
         assert.equal(manifest.min_online_version, "2.1.7");
-        assert.ok(manifest.files.some((file) => file.path === "content/Andre3D-runtime-online-2.1.13.pck"));
+        assert.ok(manifest.files.some((file) => file.path === "content/Andre3D-runtime-online-2.1.14.pck"));
         return;
       }
     } catch {}
