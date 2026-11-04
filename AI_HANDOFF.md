@@ -94,7 +94,7 @@ O bloco `client` do manifesto informa o APK mais novo:
 - `sha256`: hash do mesmo APK;
 - `mandatory_online`: metadado; o cliente atual não força a instalação do APK por esse campo.
 
-O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual é `2.2.10`, código Android `42`, na release `apk-v2.2.10` e asset `Andre3D-2.2.10.apk` (125377626 bytes; SHA-256 `aead66357bf5db363e51d7ae67b92fedcc66c1caa97a11120d7d5748c77717d2`).
+O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual é `2.2.11`, código Android `43`, na release `apk-v2.2.11` e asset `Andre3D-2.2.11.apk` (125378582 bytes; SHA-256 `eafcb30ca5174b177f3e9fca25f649c4b127d452a68b6177d7d1745a89a334f9`).
 
 Quando um novo APK for criado, primeiro publique o asset no GitHub Release e só depois atualize o manifesto. O hash deve ser calculado no arquivo final publicado:
 
@@ -143,10 +143,11 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 
 - Build: `andre3d-mp-v4`.
 - Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
-- Manifesto atual: `2026.11.04.3`; configuração de spawn: `global-10`, apenas região `center`, verificada contra COL1 do PCK.
-- APK atual: `2.2.10`, código Android `42`, package id `com.manus.andre3d.next`.
+- Manifesto atual: `2026.11.04.9`; configuração de spawn: `global-10`, apenas região `center`, verificada contra COL1 do PCK.
+- APK atual: `2.2.11`, código Android `43`, package id `com.manus.andre3d.next`.
 - PCK de mapa CENTRO: release `map-v2.2.0-regions`, 62.817.264 bytes, SHA-256 `1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356`; o manifesto atual publica apenas esta região.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
-- Release pública do APK: `apk-v2.2.10` (125377626 bytes; SHA-256 `aead66357bf5db363e51d7ae67b92fedcc66c1caa97a11120d7d5748c77717d2`).
+- Release pública do APK: `apk-v2.2.11` (125378582 bytes; SHA-256 `eafcb30ca5174b177f3e9fca25f649c4b127d452a68b6177d7d1745a89a334f9`).
+- Segurança da assinatura: a keystore de produção foi exposta no histórico público deste repositório (commit `f8f69b8`) e removida do `main` em `e9ae5b7`; os commits antigos continuam acessíveis. A 2.2.11 foi assinada com essa chave por autorização explícita do proprietário. Trate a chave como comprometida e planeje uma migração antes de futuros releases; nunca registrar a senha ou a keystore.
 
 Mantenha esta documentação atualizada sempre que mudar endpoint, protocolo, versão mínima, fluxo de release, formato do manifesto ou comando de deploy.
