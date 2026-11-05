@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.05.1",
+  "version": "2026.11.05.2",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -18,12 +18,12 @@
     },
     {
       "path": "content/Andre3D-map-center.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-center.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.2-spawn-fix/Andre3D-map-center.pck",
       "kind": "pck",
       "region": "center",
       "optional": false,
-      "size": 62817264,
-      "sha256": "1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356"
+      "size": 62720388,
+      "sha256": "fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e"
     },
     {
       "path": "config/remote_ui.json",
@@ -59,12 +59,12 @@
   "map_regions": [
     {
       "path": "content/Andre3D-map-center.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-center.pck",
+      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.2-spawn-fix/Andre3D-map-center.pck",
       "kind": "pck",
       "region": "center",
       "optional": false,
-      "size": 62817264,
-      "sha256": "1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356"
+      "size": 62720388,
+      "sha256": "fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e"
     }
   ]
 }

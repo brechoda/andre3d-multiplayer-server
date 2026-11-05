@@ -143,9 +143,9 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 
 - Build: `andre3d-mp-v4`.
 - Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
-- Manifesto atual: `2026.11.05.1`; spawn `global-13`, somente `center`. André `[184.73, 3.3474, -22.03]` e Gorece `[185.0, 3.3474, -19.0]` agora ficam na superfície COL1 validada; todos os 12 spawns locais/remotos foram conferidos contra o PCK (gap vertical máximo: `0.000 m`).
+- Manifesto atual: `2026.11.05.2`; spawn `global-13`, somente `center`. André `[184.73, 3.3474, -22.03]` e Gorece `[185.0, 3.3474, -19.0]` ficam na superfície COL1 validada; os 12 spawns locais/remotos foram conferidos contra o PCK v2.2.2 (gap vertical máximo: `0.000 m`).
 - APK atual: `2.2.11`, código Android `43`, package id `com.manus.andre3d.next`.
-- PCK de mapa CENTRO: release `map-v2.2.0-regions`, 62.817.264 bytes, SHA-256 `1ccc94887ffdc3318813cea0896d366dc6373a9705da5a74d79083dcf7caa356`; o manifesto atual publica apenas esta região.
+- PCK de mapa CENTRO: release [`map-v2.2.2-spawn-fix`](https://github.com/brechoda/andre3d-multiplayer-server/releases/tag/map-v2.2.2-spawn-fix), 62.720.388 bytes, SHA-256 `fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e`; contém só CENTRO e o manifesto interno atualizado. As releases antigas foram preservadas para rollback.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
 - Release pública do APK: `apk-v2.2.11` (125378582 bytes; SHA-256 `eafcb30ca5174b177f3e9fca25f649c4b127d452a68b6177d7d1745a89a334f9`).
 - Segurança da assinatura: a keystore de produção foi exposta no histórico público deste repositório (commit `f8f69b8`) e removida do `main` em `e9ae5b7`; os commits antigos continuam acessíveis. A 2.2.11 foi assinada com essa chave por autorização explícita do proprietário. Trate a chave como comprometida e planeje uma migração antes de futuros releases; nunca registrar a senha ou a keystore.
