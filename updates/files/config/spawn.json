@@ -2,20 +2,20 @@
   "version": 5,
   "map": "liberty_city",
   "map_region": "center",
-  "spawn_revision": "global-12",
+  "spawn_revision": "global-13",
   "player": {
     "position": [
       184.73,
-      4.7448,
+      3.3474,
       -22.03
     ],
     "rotation_y": 90.0
   },
   "gorece": {
     "position": [
-      192.73,
-      4.7448,
-      -22.03
+      185.0,
+      3.3474,
+      -19.0
     ],
     "rotation_y": 90.0
   },
@@ -58,16 +58,16 @@
       "player": {
         "position": [
           184.73,
-          4.7448,
+          3.3474,
           -22.03
         ],
         "rotation_y": 90.0
       },
       "gorece": {
         "position": [
-          192.73,
-          4.7448,
-          -22.03
+          185.0,
+          3.3474,
+          -19.0
         ],
         "rotation_y": 90.0
       },
