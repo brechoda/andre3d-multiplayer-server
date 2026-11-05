@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "revision": "default-1",
+  "revision": "level2-1",
   "elements": {
     "menu.panel": { "min_size": [460, 520], "scale": 1.0 },
     "menu.map_selector": {
       "visible": true,
       "font_size": 15,
       "items": [
-        "INDUSTRIAL — principal, menor pacote",
-        "CENTRO — bairros comerciais"
+        "CENTRO — bairros comerciais",
+        "LEVEL 2 — mapa externo"
       ]
     },
     "menu.subtitle": { "text": "ESCOLHA COMO JOGAR", "font_size": 18, "text_color": "#D9F7F4" },

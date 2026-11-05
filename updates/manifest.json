@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.05.3",
+  "version": "2026.11.05.4",
   "min_app_version": "2.1.7",
   "files": [
     {
@@ -27,10 +27,10 @@
     },
     {
       "path": "config/remote_ui.json",
-      "url": "files/config/remote_ui.json?rev=default-1",
+      "url": "files/config/remote_ui.json?rev=level2-1",
       "kind": "file",
-      "size": 3754,
-      "sha256": "a9dc7fa8a705646fb838df9bfc815b3c206bede98c642e8bd133108bd0e28c2c"
+      "size": 3739,
+      "sha256": "16020209c36f5129eff9b5f742f07fae58942f36e81ad2b3fcc6004c84ac4164"
     },
     {
       "path": "content/Andre3D-runtime-online-2.1.16.pck",
