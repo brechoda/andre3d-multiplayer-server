@@ -143,11 +143,11 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 
 - Build: `andre3d-mp-v4`.
 - Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
-- Manifesto atual: `2026.11.05.2`; spawn `global-13`, somente `center`. André `[184.73, 3.3474, -22.03]` e Gorece `[185.0, 3.3474, -19.0]` ficam na superfície COL1 validada; os 12 spawns locais/remotos foram conferidos contra o PCK v2.2.2 (gap vertical máximo: `0.000 m`).
-- APK atual: `2.2.11`, código Android `43`, package id `com.manus.andre3d.next`.
-- PCK de mapa CENTRO: release [`map-v2.2.2-spawn-fix`](https://github.com/brechoda/andre3d-multiplayer-server/releases/tag/map-v2.2.2-spawn-fix), 62.720.388 bytes, SHA-256 `fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e`; contém só CENTRO e o manifesto interno atualizado. As releases antigas foram preservadas para rollback.
+- Manifesto atualizado: `2026.11.05.5`; spawn do CENTRO `global-13`. André `[184.73, 3.3474, -22.03]` e Gorece `[185.0, 3.3474, -19.0]` ficam na superfície COL1 validada; os 12 spawns locais/remotos passam contra o PCK v2.2.2 (gap vertical máximo: `0.000 m`). Level 2 permanece opcional e independente.
+- APK atual: `2.2.12`, código Android `44`, package id `com.manus.andre3d.next`.
+- PCK de mapa CENTRO: release [`map-v2.2.2-spawn-fix`](https://github.com/brechoda/andre3d-multiplayer-server/releases/tag/map-v2.2.2-spawn-fix), 62.720.388 bytes, SHA-256 `fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e`; contém só CENTRO e o manifesto interno atualizado. Level 2 usa o asset opcional `Andre3D-map-level2.pck` (47.307.196 bytes; SHA-256 `e1bb2dace0787dbc3f0cf4db3baa29d33ca2d2ac4d45e57b447b0c2defc15b62`). Releases antigas foram preservadas para rollback.
 - Health esperado: `ok: true`, build `andre3d-mp-v4`.
-- Release pública do APK: `apk-v2.2.11` (125378582 bytes; SHA-256 `eafcb30ca5174b177f3e9fca25f649c4b127d452a68b6177d7d1745a89a334f9`).
-- Segurança da assinatura: a keystore de produção foi exposta no histórico público deste repositório (commit `f8f69b8`) e removida do `main` em `e9ae5b7`; os commits antigos continuam acessíveis. A 2.2.11 foi assinada com essa chave por autorização explícita do proprietário. Trate a chave como comprometida e planeje uma migração antes de futuros releases; nunca registrar a senha ou a keystore.
+- Release pública do APK: `apk-v2.2.12` (131065794 bytes; SHA-256 `681968b272b9b0b934fa285111675ad10292d3bf3463c4a9250f580771ce7a91`).
+- Segurança da assinatura: a keystore de produção foi exposta no histórico público deste repositório (commit `f8f69b8`) e removida do `main` em `e9ae5b7`; os commits antigos continuam acessíveis. A 2.2.12 foi assinada com essa chave. Trate-a como comprometida e planeje uma migração antes de futuros releases; nunca registrar a senha ou a keystore.
 
 Mantenha esta documentação atualizada sempre que mudar endpoint, protocolo, versão mínima, fluxo de release, formato do manifesto ou comando de deploy.
