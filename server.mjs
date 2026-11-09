@@ -25,7 +25,7 @@ const VEHICLE_TYPES = new Map([
   ["fiatuno_01", "fiatuno"],
 ]);
 const CHARACTERS = new Set(["andre", "gorece", "dg"]);
-const ATTACK_ANIMATIONS = new Set(["FightA_1", "FightA_2", "FightA_3"]);
+const ATTACK_ANIMATIONS = new Set(["FightA_1", "FightA_2", "FightA_3", "Gun_stand", "Gun_2_IDLE", "SHOT_partial"]);
 const rooms = new Map();
 let nextId = 1;
 
