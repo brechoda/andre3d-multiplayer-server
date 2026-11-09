@@ -1,17 +1,17 @@
 {
-  "version": "2026.11.09.1",
+  "version": "2026.11.09.2",
   "min_app_version": "3.0.0",
   "files": [
     {
       "path": "config/tuning.json",
-      "url": "files/config/tuning.json",
+      "url": "https://andre3d-multiplayer-server.onrender.com/updates/files/config/tuning.json",
       "kind": "file",
       "size": 10477,
       "sha256": "66b531bf17e8910c5720d62c59f4d9cc80d8a0bef8a1751887ef03a7f6d93a0c"
     },
     {
       "path": "config/spawn.json",
-      "url": "files/config/spawn.json",
+      "url": "https://andre3d-multiplayer-server.onrender.com/updates/files/config/spawn.json",
       "kind": "file",
       "size": 1830,
       "sha256": "9b839af0a1b967a482cb7a5b4d55bfd0b6da322d8a2c311e3b42d7c37ec0253b"
@@ -27,21 +27,21 @@
     },
     {
       "path": "config/remote_ui.json",
-      "url": "files/config/remote_ui.json?rev=level2-1",
+      "url": "https://andre3d-multiplayer-server.onrender.com/updates/files/config/remote_ui.json?rev=level2-1",
       "kind": "file",
       "size": 3739,
       "sha256": "16020209c36f5129eff9b5f742f07fae58942f36e81ad2b3fcc6004c84ac4164"
     },
     {
       "path": "content/Andre3D-runtime-online-2.1.16.pck",
-      "url": "files/content/Andre3D-runtime-online-2.1.16.pck",
+      "url": "https://andre3d-multiplayer-server.onrender.com/updates/files/content/Andre3D-runtime-online-2.1.16.pck",
       "kind": "pck",
       "size": 50965396,
       "sha256": "5f991a8a99b93bc9fb6948580a69b2d27df5c4d9d937142289026800b4a03bb7"
     },
     {
       "path": "audio/hilux_srx_2017_parada_simulacao.wav",
-      "url": "files/audio/hilux_srx_2017_parada_simulacao.wav",
+      "url": "https://andre3d-multiplayer-server.onrender.com/updates/files/audio/hilux_srx_2017_parada_simulacao.wav",
       "kind": "file",
       "size": 1058444,
       "sha256": "8d7f05cc76f4bfa3b8388b62cfe175ad1da360e1124c87a62982f30f573e4b3c"
