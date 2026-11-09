@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.09.3",
+  "version": "2026.11.09.4",
   "min_app_version": "3.0.0",
   "files": [
     {
@@ -45,15 +45,6 @@
       "kind": "file",
       "size": 1058444,
       "sha256": "8d7f05cc76f4bfa3b8388b62cfe175ad1da360e1124c87a62982f30f573e4b3c"
-    },
-    {
-      "path": "content/Andre3D-map-level2.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-level2.pck",
-      "kind": "pck",
-      "region": "level2",
-      "optional": true,
-      "size": 47307196,
-      "sha256": "e1bb2dace0787dbc3f0cf4db3baa29d33ca2d2ac4d45e57b447b0c2defc15b62"
     }
   ],
   "min_online_version": "2.1.7",
@@ -66,22 +57,13 @@
       "optional": false,
       "size": 62720388,
       "sha256": "fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e"
-    },
-    {
-      "path": "content/Andre3D-map-level2.pck",
-      "url": "https://github.com/brechoda/andre3d-multiplayer-server/releases/download/map-v2.2.0-regions/Andre3D-map-level2.pck",
-      "kind": "pck",
-      "region": "level2",
-      "optional": true,
-      "size": 47307196,
-      "sha256": "e1bb2dace0787dbc3f0cf4db3baa29d33ca2d2ac4d45e57b447b0c2defc15b62"
     }
   ],
   "variant": "andre3d-pistol",
   "client": {
-    "version": "3.0.1",
-    "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519664071928669/SpfOoNNzCtWAbScE.apk",
-    "size": 131086630,
-    "sha256": "147afb83678f27f7aaa44268fb8b3234b540debc73de2572a2dc34c873831751"
+    "version": "3.0.5",
+    "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519664071928669/TrFqOiMvdbDfcQCg.apk",
+    "size": 131086654,
+    "sha256": "49f2b8df27c151c57b7516fc9348ec2882d0c1475c6dd7c6cf03102a6a167558"
   }
 }
