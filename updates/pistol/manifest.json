@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.09.2",
+  "version": "2026.11.09.3",
   "min_app_version": "3.0.0",
   "files": [
     {
@@ -77,5 +77,11 @@
       "sha256": "e1bb2dace0787dbc3f0cf4db3baa29d33ca2d2ac4d45e57b447b0c2defc15b62"
     }
   ],
-  "variant": "andre3d-pistol"
+  "variant": "andre3d-pistol",
+  "client": {
+    "version": "3.0.1",
+    "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519664071928669/SpfOoNNzCtWAbScE.apk",
+    "size": 131086630,
+    "sha256": "147afb83678f27f7aaa44268fb8b3234b540debc73de2572a2dc34c873831751"
+  }
 }
