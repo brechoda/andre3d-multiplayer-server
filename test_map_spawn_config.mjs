@@ -47,4 +47,16 @@ const centerPckFile = manifest.files.find((entry) => entry.region === "center");
 assert.ok(centerPck, "manifest must publish the selected center PCK");
 assert.deepEqual(centerPck, centerPckFile, "the downloadable and selectable center PCK entries must match");
 
-console.log("Map spawn configuration, validated center coordinates, and manifest hashes are consistent.");
+const pistolManifest = JSON.parse(readFileSync(join(root, "updates/pistol/manifest.json"), "utf8"));
+assert.equal(pistolManifest.variant, "andre3d-pistol");
+assert.deepEqual(pistolManifest.map_regions.map((entry) => entry.region), ["center"]);
+const pistolCenterPck = pistolManifest.map_regions.find((entry) => entry.region === "center");
+const pistolCenterPckFile = pistolManifest.files.find((entry) => entry.region === "center");
+assert.deepEqual(pistolCenterPck, centerPck, "both client variants must use the same validated center PCK");
+assert.deepEqual(pistolCenterPck, pistolCenterPckFile, "the Pistola selectable and downloadable PCK entries must match");
+const pistolSpawnEntry = pistolManifest.files.find((entry) => entry.path === "config/spawn.json");
+assert.ok(pistolSpawnEntry, "Pistola manifest must publish config/spawn.json");
+assert.equal(pistolSpawnEntry.size, spawnBytes.length);
+assert.equal(pistolSpawnEntry.sha256, createHash("sha256").update(spawnBytes).digest("hex"));
+
+console.log("Both client manifests publish only the validated center PCK and consistent global-13 spawn hashes.");

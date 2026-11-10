@@ -14,10 +14,10 @@ Este é o servidor de produção do jogo Andre 3D. Ele é independente do projet
 - URL pública: `https://andre3d-multiplayer-server.onrender.com`
 - Health check: `/health`
 - WebSocket: `/ws`
-- Manifesto: `/updates/manifest.json`
+- Manifestos: `/updates/manifest.json` (cliente principal/legado) e `/updates/pistol/manifest.json` (variante Pistola)
 - Conteúdo de update: `/updates/files/...`
 
-O Render está ligado ao repositório. Push em `main` dispara deploy automático. Depois de um push, confirme `/health` e o manifesto público; o deploy pode levar alguns segundos.
+O Render está ligado ao repositório. Push em `main` dispara deploy automático. Depois de um push, confirme `/health` e ambos os manifests públicos; o deploy pode levar alguns segundos.
 
 ## Contrato do cliente
 
@@ -50,7 +50,7 @@ O servidor ainda sincroniza principalmente estados e animações. Não afirmar q
 
 ## Atualizações de conteúdo
 
-O arquivo `updates/manifest.json` é servido estaticamente. Cada entrada em `files` deve conter:
+Os arquivos `updates/manifest.json` e `updates/pistol/manifest.json` são servidos estaticamente. Cada variante usa seu próprio manifesto; conteúdo compartilhado, como spawn e PCK CENTRO, deve permanecer coerente nos dois. Cada entrada em `files` deve conter:
 
 - `path`: caminho relativo seguro usado pelo cliente;
 - `url`: caminho relativo servido pelo servidor;
@@ -64,7 +64,7 @@ Para atualizar `config/tuning.json`:
 
 1. Alterar `updates/files/config/tuning.json`.
 2. Calcular tamanho e SHA-256.
-3. Atualizar somente os campos correspondentes em `updates/manifest.json`.
+3. Atualizar os campos correspondentes em ambos os manifests se o arquivo for usado pelos dois clientes; caso contrário, atualizar apenas o manifesto da variante que o consome.
 4. Incrementar `manifest.version`.
 5. Rodar `git diff --check` e `npm test`.
 6. Fazer commit/push para `main`.
@@ -85,18 +85,18 @@ PY
 
 ## Atualizações do próprio APK
 
-O bloco `client` do manifesto informa o APK mais novo:
+O bloco `client` informa o APK anunciado por cada variante. O manifesto principal (`updates/manifest.json`) usa assets de GitHub Release; o manifesto Pistola (`updates/pistol/manifest.json`) pode usar sua URL CDN independente. Em ambos os casos, confira o arquivo final contra `size` e `sha256`.
 
 - `version`: versão exibida ao jogador;
 - `code`: version code Android;
-- `url`: asset de GitHub Release;
+- `url`: URL pública do asset de APK;
 - `size`: tamanho do APK publicado;
 - `sha256`: hash do mesmo APK;
 - `mandatory_online`: metadado; o cliente atual não força a instalação do APK por esse campo.
 
-O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Neste release, `min_online_version` permanece `2.1.7`; o APK atual é `2.2.11`, código Android `43`, na release `apk-v2.2.11` e asset `Andre3D-2.2.11.apk` (125378582 bytes; SHA-256 `eafcb30ca5174b177f3e9fca25f649c4b127d452a68b6177d7d1745a89a334f9`).
+O cliente usa `min_online_version` como gate online; o servidor aplica `MIN_CLIENT_VERSION` (padrão `2.1.1`, sobrescrevível no Render). Alinhe os dois quando for necessário forçar uma migração. Estado verificado em 2026-11-10: o manifesto principal `2026.11.07.1` anuncia cliente `2.2.13`, código `45`, release `apk-v2.2.13`; o manifesto Pistola `2026.11.09.4` (`andre3d-pistol`, `min_app_version` `3.0.0`) anuncia cliente `3.0.5` via CDN (`131086654` bytes; SHA-256 `49f2b8df27c151c57b7516fc9348ec2882d0c1475c6dd7c6cf03102a6a167558`). O APK CDN foi baixado e conferido nesta auditoria. A fonte do cliente Pistola já está em `3.0.6`, mas o CI só produz artefato debug.
 
-Quando um novo APK for criado, primeiro publique o asset no GitHub Release e só depois atualize o manifesto. O hash deve ser calculado no arquivo final publicado:
+Quando um novo APK for criado, primeiro publique o asset no destino correspondente (GitHub Release para o cliente principal ou CDN configurado para Pistola) e só depois atualize o manifesto dessa variante. O hash deve ser calculado no arquivo final publicado:
 
 ```bash
 APK=/caminho/Andre3D-X.Y.Z.apk
@@ -142,12 +142,13 @@ Não excluir releases ou sobrescrever assets sem saber qual APK está instalado 
 ## Estado atual entregue
 
 - Build: `andre3d-mp-v4`.
-- Gate do cliente: `min_online_version` `2.1.7`; gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`.
-- Manifesto atualizado: `2026.11.07.1`; spawn do CENTRO `global-13`. André `[184.73, 3.3474, -22.03]` e Gorece `[185.0, 3.3474, -19.0]` ficam na superfície COL1 validada; os 12 spawns locais/remotos passam contra o PCK v2.2.2 (gap vertical máximo: `0.000 m`). Level 2 permanece opcional e independente.
-- APK atual: `2.2.13`, código Android `45`, package id `com.manus.andre3d.next`.
-- PCK de mapa CENTRO: release [`map-v2.2.2-spawn-fix`](https://github.com/brechoda/andre3d-multiplayer-server/releases/tag/map-v2.2.2-spawn-fix), 62.720.388 bytes, SHA-256 `fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e`; contém só CENTRO e o manifesto interno atualizado. Level 2 usa o asset opcional `Andre3D-map-level2.pck` (47.307.196 bytes; SHA-256 `e1bb2dace0787dbc3f0cf4db3baa29d33ca2d2ac4d45e57b447b0c2defc15b62`). Uma inspeção da cena Level2 exportada encontrou 2.556 MeshInstance3D e nenhum StaticBody3D/CollisionShape3D; validar/criar colisão antes de declarar essa região pronta para gameplay. Releases antigas foram preservadas para rollback.
-- Health esperado: `ok: true`, build `andre3d-mp-v4`.
-- Release pública do APK: `apk-v2.2.13` (131069890 bytes; SHA-256 `8805400706d04e6a02a9375ef254c2ed6b62e0645ae8d48ee16306668c737da2`).
+- Gate padrão do servidor: `MIN_CLIENT_VERSION` `2.1.1`; `min_online_version` é `2.1.7` nos manifests ativos.
+- Manifests vivos: principal `2026.11.07.1`, cliente `2.2.13`/código `45`; Pistola `2026.11.09.4`, variante `andre3d-pistol`, `min_app_version` `3.0.0`, cliente `3.0.5` por CDN (131.086.654 bytes; SHA-256 `49f2b8df27c151c57b7516fc9348ec2882d0c1475c6dd7c6cf03102a6a167558`). O arquivo CDN conferiu contra tamanho e hash.
+- Ambos os manifests listam somente CENTRO; Level 2 não está atualmente disponível para download/seleção. Spawn remoto `global-13`: André `[184.73, 3.3474, -22.03]`, Gorece `[185.0, 3.3474, -19.0]`; os 12 pontos locais/remotos passaram sobre COL1 com gap máximo `0.000 m`.
+- PCK CENTRO ativo: release [`map-v2.2.2-spawn-fix`](https://github.com/brechoda/andre3d-multiplayer-server/releases/tag/map-v2.2.2-spawn-fix), 62.720.388 bytes, SHA-256 `fc38ae751ea53c8795c222436ff7f332916a79eae5086521ced0ba7037cab26e`. Liberty City permanece parcial: quatro de 12 tiles-base.
+- Fonte cliente Pistola: versão `3.0.6`, código Android `7`, package id `com.manus.andre3d.pistol`; o workflow produz apenas artefato debug. A última GitHub Release principal é `apk-v2.2.13` (131.069.890 bytes; SHA-256 `8805400706d04e6a02a9375ef254c2ed6b62e0645ae8d48ee16306668c737da2`).
+- Health verificado: `ok: true`, build `andre3d-mp-v4`; `node --check` e `npm test` passaram. A suíte também garante igualdade do PCK/spawn publicados nas duas variantes.
+- Pendências: playtest visual e Android físico para download, streaming, vidro, desempenho e controles; integrar os oito tiles faltantes para declarar Liberty City completa. Reativar Level 2 exige nova validação de colisões, memória e desempenho em dispositivo real.
 - Segurança da assinatura: a keystore de produção foi exposta no histórico público deste repositório (commit `f8f69b8`) e removida do `main` em `e9ae5b7`; os commits antigos continuam acessíveis. A 2.2.13 foi assinada com essa chave. Trate-a como comprometida e planeje uma migração antes de futuros releases; nunca registrar a senha ou a keystore.
 
 Mantenha esta documentação atualizada sempre que mudar endpoint, protocolo, versão mínima, fluxo de release, formato do manifesto ou comando de deploy.
